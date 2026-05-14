@@ -1,0 +1,167 @@
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-4">
+  <div class="max-w-md w-full bg-white rounded-3xl shadow-2xl overflow-hidden transition-all duration-500 hover:shadow-indigo-500/20">
+    
+    <!-- Header -->
+    <div class="bg-indigo-600 px-8 py-10 text-center relative overflow-hidden">
+      <div class="absolute inset-0 opacity-10">
+        <svg fill="currentColor" viewBox="0 0 100 100" class="h-full w-full">
+          <circle cx="50" cy="50" r="40" />
+        </svg>
+      </div>
+      <h2 class="text-3xl font-extrabold text-white relative z-10" id="auth-title">
+        {{ isSignIn() ? 'Welcome Back' : 'Create Account' }}
+      </h2>
+      <p class="mt-2 text-indigo-100 relative z-10">
+        {{ isSignIn() ? 'Great to see you again!' : 'Join our premium shopping community' }}
+      </p>
+    </div>
+
+    <!-- Form Container -->
+    <div class="p-8">
+      
+      <!-- Alerts -->
+      @if (errorMessage()) {
+        <div id="auth-error-alert" class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-r-lg flex items-center shadow-sm">
+          <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+          <span id="auth-error-message">{{ errorMessage() }}</span>
+        </div>
+      }
+
+      @if (successMessage()) {
+        <div id="auth-success-alert" class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-r-lg flex items-center shadow-sm">
+          <svg class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+          <span id="auth-success-message">{{ successMessage() }}</span>
+        </div>
+      }
+
+      @if (isSignIn()) {
+        <!-- Sign In Form -->
+        <form [formGroup]="signInForm" (ngSubmit)="onSignIn()" @fadeSlide class="space-y-6" id="signin-form">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
+            <div class="relative">
+              <input type="email" formControlName="email" id="signin-email"
+                     [class.border-red-500]="isInvalid('signIn', 'email')"
+                     class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                     placeholder="john@example.com">
+            </div>
+            @if (isInvalid('signIn', 'email')) {
+              <p class="mt-1 text-xs text-red-500" id="signin-email-error">
+                Please enter a valid email address.
+              </p>
+            }
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Password</label>
+            <div class="relative">
+              <input [type]="showPassword() ? 'text' : 'password'" formControlName="password" id="signin-password"
+                     [class.border-red-500]="isInvalid('signIn', 'password')"
+                     class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                     placeholder="••••••••">
+              <button type="button" (click)="togglePasswordVisibility()" id="signin-toggle-password" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-indigo-600">
+                @if (!showPassword()) {
+                  <span class="text-xs font-medium" id="signin-toggle-password-show">SHOW</span>
+                } @else {
+                  <span class="text-xs font-medium" id="signin-toggle-password-hide">HIDE</span>
+                }
+              </button>
+            </div>
+            @if (isInvalid('signIn', 'password')) {
+              <p class="mt-1 text-xs text-red-500" id="signin-password-error">
+                Password is required.
+              </p>
+            }
+          </div>
+
+          <button type="submit" [disabled]="signInForm.invalid || isLoading()" id="signin-submit"
+                  class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 transform active:scale-95 disabled:opacity-50 disabled:scale-100 flex items-center justify-center space-x-2 shadow-lg shadow-indigo-200">
+            @if (isLoading()) {
+              <svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            }
+            <span>{{ isLoading() ? 'Processing...' : 'Sign In' }}</span>
+          </button>
+        </form>
+      } @else {
+        <!-- Sign Up Form -->
+        <form [formGroup]="signUpForm" (ngSubmit)="onSignUp()" @fadeSlide class="space-y-4" id="signup-form">
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Username</label>
+            <input type="text" formControlName="username" id="signup-username"
+                   [class.border-red-500]="isInvalid('signUp', 'username')"
+                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                   placeholder="johndoe">
+            @if (isInvalid('signUp', 'username')) {
+              <p class="mt-1 text-xs text-red-500" id="signup-username-error">
+                Username must be at least 3 characters.
+              </p>
+            }
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Email Address</label>
+            <input type="email" formControlName="email" id="signup-email"
+                   [class.border-red-500]="isInvalid('signUp', 'email')"
+                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                   placeholder="john@example.com">
+            @if (isInvalid('signUp', 'email')) {
+              <p class="mt-1 text-xs text-red-500" id="signup-email-error">
+                Please enter a valid email address.
+              </p>
+            }
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Password</label>
+            <input [type]="showPassword() ? 'text' : 'password'" formControlName="password" id="signup-password"
+                   [class.border-red-500]="isInvalid('signUp', 'password')"
+                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                   placeholder="••••••••">
+            @if (isInvalid('signUp', 'password')) {
+              <p class="mt-1 text-xs text-red-500" id="signup-password-error">
+                Password must be 8+ chars with uppercase, lowercase, number, and symbol.
+              </p>
+            }
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">Confirm Password</label>
+            <input [type]="showPassword() ? 'text' : 'password'" formControlName="confirmPassword" id="signup-confirm-password"
+                   [class.border-red-500]="isInvalid('signUp', 'confirmPassword')"
+                   class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all outline-none"
+                   placeholder="••••••••">
+            @if (isInvalid('signUp', 'confirmPassword')) {
+              <p class="mt-1 text-xs text-red-500" id="signup-confirm-password-error">
+                Passwords do not match.
+              </p>
+            }
+          </div>
+
+          <button type="submit" [disabled]="signUpForm.invalid || isLoading()" id="signup-submit"
+                  class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl transition-all duration-300 transform active:scale-95 disabled:opacity-50 disabled:scale-100 flex items-center justify-center space-x-2 shadow-lg shadow-indigo-200">
+            @if (isLoading()) {
+              <svg class="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+              </svg>
+            }
+            <span>{{ isLoading() ? 'Creating Account...' : 'Sign Up' }}</span>
+          </button>
+        </form>
+      }
+
+      <!-- Toggle Link -->
+      <div class="mt-8 text-center">
+        <p class="text-gray-600">
+          {{ isSignIn() ? "Don't have an account?" : "Already have an account?" }}
+          <button (click)="toggleForm()" id="auth-toggle-link" class="text-indigo-600 font-bold hover:text-indigo-700 transition-colors ml-1 focus:outline-none">
+            {{ isSignIn() ? 'Sign Up' : 'Sign In' }}
+          </button>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

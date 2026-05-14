@@ -1,0 +1,130 @@
+<app-navbar></app-navbar>
+
+<main class="min-h-screen bg-gray-50 py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    @if (product(); as product) {
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+        <!-- Left Side: Product Images -->
+        <div class="space-y-6">
+          <div class="bg-white rounded-[2.5rem] overflow-hidden shadow-xl border border-gray-100 group" id="product-main-image-container">
+            <img [src]="product.image" [alt]="product.title" id="product-main-image"
+                 class="w-full h-[500px] object-cover transition-transform duration-500 group-hover:scale-105">
+          </div>
+          <!-- Gallery Preview (Mock) -->
+          <div class="grid grid-cols-4 gap-4" id="product-gallery">
+            @for (i of [1,2,3,4]; track i) {
+              <div class="bg-white rounded-2xl overflow-hidden shadow-md border border-gray-100 cursor-pointer hover:border-indigo-600 transition-all"
+                   [attr.id]="'product-gallery-item-' + i">
+                <img [src]="product.image" alt="iamge" class="w-full h-24 object-cover opacity-60 hover:opacity-100">
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Right Side: Product Info -->
+        <div class="flex flex-col">
+          <div class="bg-white rounded-[2.5rem] p-10 shadow-xl border border-gray-100 flex-grow">
+            <div class="flex justify-between items-start mb-4">
+              <span class="px-4 py-1 bg-indigo-50 text-indigo-600 text-sm font-bold rounded-full" id="product-category-badge">
+                {{ product.category }}
+              </span>
+              <div class="flex items-center space-x-1" id="product-rating-container">
+                <mat-icon class="text-yellow-400">star</mat-icon>
+                <span class="font-bold text-gray-700" id="product-rating-value">{{ product.rating }}</span>
+                <span class="text-gray-400">(120 Reviews)</span>
+              </div>
+            </div>
+
+            <h1 class="text-4xl font-black text-gray-900 mb-4" id="product-title">{{ product.title }}</h1>
+            
+            <div class="text-3xl font-black text-indigo-600 mb-8" id="product-price">
+              {{ product.price | currency }}
+            </div>
+
+            <div class="mb-8">
+              <h3 class="text-lg font-bold text-gray-900 mb-3">Description</h3>
+              <p class="text-gray-500 leading-relaxed" id="product-description">
+                {{ product.description }}
+              </p>
+            </div>
+
+            <!-- Availability & Stock -->
+            <div class="flex items-center space-x-4 mb-8">
+              <div class="flex items-center space-x-2 text-sm font-bold">
+                <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                <span class="text-gray-700" id="product-stock-status">In Stock</span>
+              </div>
+              <div class="text-gray-400 text-sm" id="product-stock-count">
+                <span id="product-stock-value">{{ product.stock }}</span> units available
+              </div>
+            </div>
+
+
+            <!-- Quantity & Actions -->
+            <div class="flex flex-col sm:flex-row items-center gap-6">
+              <div class="flex items-center bg-gray-100 rounded-2xl p-1">
+                <button mat-icon-button (click)="decrementQuantity()" [disabled]="quantity() <= 1" id="decrease-quantity-btn"
+                        class="w-10 h-10 leading-10 hover:bg-white hover:shadow-sm transition-all">
+                  <mat-icon>remove</mat-icon>
+                </button>
+                <span class="w-12 text-center font-black text-lg" id="product-quantity-display">{{ quantity() }}</span>
+                <button mat-icon-button (click)="incrementQuantity()" [disabled]="quantity() >= product.stock" id="increase-quantity-btn"
+                        class="w-10 h-10 leading-10 hover:bg-white hover:shadow-sm transition-all">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+
+              <button mat-flat-button color="primary" id="add-to-cart-details-btn"
+                      (click)="addToCart(product)"
+                      class="!px-8 !py-7 !text-lg !rounded-2xl !text-white !bg-indigo-600 hover:!bg-indigo-700 flex-grow transition-all transform active:scale-95 shadow-lg shadow-indigo-200">
+                <mat-icon class="mr-2">add_shopping_cart</mat-icon>
+                Add to Cart
+              </button>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Section: Reviews -->
+      <div class="bg-white rounded-[2.5rem] p-10 shadow-xl border border-gray-100">
+        <h2 class="text-2xl font-black text-gray-900 mb-10 flex items-center gap-3">
+          Customer Reviews
+          <span class="text-sm font-bold bg-gray-100 text-gray-500 px-3 py-1 rounded-full" id="review-count">{{ reviews().length }}</span>
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="reviews-grid">
+          @for (review of reviews(); track review.id) {
+            <div class="bg-gray-50 rounded-3xl p-6 border border-gray-100 hover:shadow-md transition-all" [attr.id]="'review-card-' + review.id">
+              <div class="flex items-center space-x-4 mb-4">
+                <img [src]="review.reviewerAvatar" [alt]="review.reviewerName" class="w-12 h-12 rounded-2xl object-cover shadow-sm">
+                <div>
+                  <h4 class="font-bold text-gray-900 text-sm" [attr.id]="'reviewer-name-' + review.id">{{ review.reviewerName }}</h4>
+                  <p class="text-xs text-gray-400">{{ review.date | date:'mediumDate' }}</p>
+                </div>
+              </div>
+              <div class="flex items-center mb-3">
+                @for (star of [1,2,3,4,5]; track star) {
+                  <mat-icon class="text-sm h-auto w-auto"
+                            [class.text-yellow-400]="star <= review.rating"
+                            [class.text-gray-300]="star > review.rating">star</mat-icon>
+                }
+              </div>
+              <p class="text-gray-600 text-sm leading-relaxed italic" [attr.id]="'review-comment-' + review.id">
+                "{{ review.comment }}"
+              </p>
+            </div>
+          } @empty {
+            <p class="text-gray-500 italic" id="no-reviews-message">No reviews yet for this product.</p>
+          }
+        </div>
+      </div>
+    } @else {
+      <div class="flex flex-col items-center justify-center min-h-[600px] space-y-4" id="product-loading-container">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-indigo-600 border-t-transparent"></div>
+        <p class="text-gray-500 font-bold">Loading product details...</p>
+      </div>
+    }
+  </div>
+</main>

@@ -1,0 +1,172 @@
+<app-navbar></app-navbar>
+
+<main class="min-h-screen bg-gray-50 py-12">
+  @if (authService.currentUser(); as user) {
+    <div class="max-w-4xl mx-auto px-4">
+      
+      <!-- Profile Header Card -->
+      <div class="profile-header-card">
+        <div class="header-gradient"></div>
+        <div class="px-8 pb-8">
+          <div class="relative flex flex-col md:flex-row items-center -mt-16 md:space-x-8">
+            <div class="relative">
+              <img [src]="user.avatar" [alt]="user.username" id="profile-avatar"
+                   class="avatar-image">
+              <div class="status-indicator"></div>
+            </div>
+            <div class="mt-6 md:mt-16 text-center md:text-left flex-grow">
+              <h1 class="text-3xl font-black text-gray-900" id="profile-name-title">{{ user.fullName || user.username }}</h1>
+              <p class="text-gray-500 font-medium" id="profile-email-subtitle">{{ user.email }}</p>
+            </div>
+            <div class="mt-6 md:mt-16">
+              <button (click)="toggleEditMode()" id="toggle-edit-mode-btn"
+                      [class]="isEditMode() ? 'cancel-btn' : 'edit-btn'">
+                <mat-icon>{{ isEditMode() ? 'close' : 'edit' }}</mat-icon>
+                {{ isEditMode() ? 'Cancel' : 'Edit Profile' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column: Stats -->
+        <div class="space-y-8">
+          <!-- Stats Card -->
+          <div class="side-card">
+            <h3 class="side-card-title">
+              <mat-icon class="text-indigo-600">bar_chart</mat-icon>
+              Account Stats
+            </h3>
+            <div class="space-y-4">
+              <div class="stat-row">
+                <span class="text-gray-500">Total Orders</span>
+                <span class="stat-value" id="stat-order-count">{{ user.orderCount }}</span>
+              </div>
+              <div class="stat-row">
+                <span class="text-gray-500">Member Since</span>
+                <span class="font-bold text-gray-700" id="stat-member-since">{{ user.createdAt | date:'MMM yyyy' }}</span>
+              </div>
+              <div class="stat-row">
+                <span class="text-gray-500">Role</span>
+                <span class="role-badge" id="stat-user-role">{{ user.role }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Profile Form -->
+        <div class="lg:col-span-2">
+          @if (profileForm) {
+            <form [formGroup]="profileForm" (ngSubmit)="onSave()" class="space-y-8" id="profile-form">
+              <!-- Personal Info -->
+              <div class="form-section">
+                <h3 class="form-section-title">
+                  <mat-icon class="text-indigo-600">person</mat-icon>
+                  Personal Information
+                </h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div class="input-group">
+                    <label class="input-label">Full Name</label>
+                    <input type="text" formControlName="fullName" id="profile-fullname-input"
+                           [readonly]="!isEditMode()"
+                           [class.readonly]="!isEditMode()"
+                           class="form-input">
+                  </div>
+                  <div class="input-group">
+                    <label class="input-label">Email (Read-only)</label>
+                    <input type="email" formControlName="email" readonly id="profile-email-input"
+                           class="form-input readonly text-gray-400">
+                  </div>
+                  <div class="input-group">
+                    <label class="input-label">Phone Number</label>
+                    <input type="text" formControlName="phoneNumber" id="profile-phone-input"
+                           [readonly]="!isEditMode()"
+                           [class.readonly]="!isEditMode()"
+                           class="form-input">
+                  </div>
+                  <div class="input-group">
+                    <label class="input-label">Alt. Phone Number</label>
+                    <input type="text" formControlName="alternatePhone" id="profile-alt-phone-input"
+                           [readonly]="!isEditMode()"
+                           [class.readonly]="!isEditMode()"
+                           class="form-input">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Address Details -->
+              <div class="form-section">
+                <h3 class="form-section-title">
+                  <mat-icon class="text-indigo-600">home</mat-icon>
+                  Address Details
+                </h3>
+                
+                <div class="space-y-6">
+                  <div class="input-group">
+                    <label class="input-label">Full Address</label>
+                    <textarea formControlName="address" rows="3" id="profile-address-input"
+                           [readonly]="!isEditMode()"
+                           [class.readonly]="!isEditMode()"
+                           class="form-input resize-none"></textarea>
+                  </div>
+                  
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="input-group">
+                      <label class="input-label">City</label>
+                      <input type="text" formControlName="city" id="profile-city-input"
+                             [readonly]="!isEditMode()"
+                             [class.readonly]="!isEditMode()"
+                             class="form-input">
+                    </div>
+                    <div class="input-group">
+                      <label class="input-label">State</label>
+                      <input type="text" formControlName="state" id="profile-state-input"
+                             [readonly]="!isEditMode()"
+                             [class.readonly]="!isEditMode()"
+                             class="form-input">
+                    </div>
+                    <div class="input-group">
+                      <label class="input-label">Country</label>
+                      <input type="text" formControlName="country" id="profile-country-input"
+                             [readonly]="!isEditMode()"
+                             [class.readonly]="!isEditMode()"
+                             class="form-input">
+                    </div>
+                    <div class="input-group">
+                      <label class="input-label">Pincode</label>
+                      <input type="text" formControlName="pincode" id="profile-pincode-input"
+                             [readonly]="!isEditMode()"
+                             [class.readonly]="!isEditMode()"
+                             class="form-input">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Buttons (Only in Edit Mode) -->
+              @if (isEditMode()) {
+                <div class="flex justify-end gap-4" id="profile-actions-container">
+                  <button type="button" (click)="toggleEditMode()" id="profile-discard-btn"
+                          class="discard-btn">
+                    Discard
+                  </button>
+                  <button type="submit" [disabled]="profileForm.invalid || isLoading()" id="profile-save-btn"
+                          class="save-btn">
+                    {{ isLoading() ? 'Saving...' : 'Save Changes' }}
+                  </button>
+                </div>
+              }
+            </form>
+          }
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="flex flex-col items-center justify-center min-h-[600px] space-y-4" id="profile-loading-container">
+      <div class="animate-spin rounded-full h-12 w-12 border-4 border-indigo-600 border-t-transparent"></div>
+      <p class="text-gray-500 font-bold text-lg">Loading your profile...</p>
+    </div>
+  }
+</main>

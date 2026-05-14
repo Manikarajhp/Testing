@@ -1,0 +1,34 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.auth-card {
+  transition: height 0.3s ease-in-out;
+}
+
+input::placeholder {
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+// Custom animation for the input focus ring
+input:focus {
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+
+// Success/Error toast animations (if added later)
+.toast-enter {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

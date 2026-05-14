@@ -1,0 +1,95 @@
+import { Component, inject, signal, effect, ChangeDetectorRef } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { AuthService } from '../../core/services/auth.service';
+import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
+import { take } from 'rxjs/operators';
+
+@Component({
+  selector: 'app-profile',
+  standalone: true,
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    MatIconModule, 
+    MatButtonModule, 
+    MatCardModule, 
+    MatDividerModule,
+    MatSnackBarModule,
+    NavbarComponent
+  ],
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss']
+})
+export class ProfileComponent {
+  private fb = inject(FormBuilder);
+  public authService = inject(AuthService);
+  private snackBar = inject(MatSnackBar);
+  private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
+
+  profileForm!: FormGroup;
+  isEditMode = signal(false);
+  isLoading = signal(false);
+
+  constructor() {
+    effect(() => {
+      const user = this.authService.currentUser();
+      if (!user) {
+        this.router.navigate(['/auth']);
+      } else if (!this.profileForm) {
+        this.initForm(user);
+      }
+    });
+  }
+
+  initForm(user: any): void {
+    this.profileForm = this.fb.group({
+      fullName: [user.fullName || '', [Validators.required]],
+      email: [user.email],
+      phoneNumber: [user.phoneNumber || '', [Validators.pattern('^[0-9]{10}$')]],
+      alternatePhone: [user.alternatePhone || '', [Validators.pattern('^[0-9]{10}$')]],
+      address: [user.address || ''],
+      city: [user.city || ''],
+      state: [user.state || ''],
+      country: [user.country || ''],
+      pincode: [user.pincode || '', [Validators.pattern('^[0-9]{6}$')]]
+    });
+  }
+
+  toggleEditMode(): void {
+    this.isEditMode.update(v => !v);
+    if (!this.isEditMode() && this.authService.currentUser()) {
+      this.initForm(this.authService.currentUser());
+    }
+  }
+
+  onSave(): void {
+    if (this.profileForm.invalid) return;
+
+    this.isLoading.set(true);
+    this.authService.updateProfile(this.profileForm.value).pipe(take(1)).subscribe({
+      next: () => {
+        this.isLoading.set(false);
+        this.isEditMode.set(false);
+        this.cdr.detectChanges();
+        this.snackBar.open('Profile updated successfully! ✨', 'Close', {
+          duration: 3000,
+          panelClass: ['bg-green-600', 'text-white']
+        });
+      },
+      error: () => {
+        this.isLoading.set(false);
+        this.snackBar.open('Failed to update profile. Please try again.', 'Close', {
+          duration: 3000
+        });
+      }
+    });
+  }
+}
