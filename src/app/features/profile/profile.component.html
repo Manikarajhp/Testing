@@ -9,7 +9,7 @@
         <div class="px-8 pb-8">
           <div class="relative flex flex-col md:flex-row items-center -mt-16 md:space-x-8">
             <div class="relative">
-              <img [src]="user.avatar" [alt]="user.username" id="profile-avatar"
+              <img [src]="user.avatar" alt="" id="profile-avatar"
                    class="avatar-image">
               <div class="status-indicator"></div>
             </div>
@@ -88,6 +88,8 @@
                   <div class="input-group">
                     <label class="input-label">Alt. Phone Number</label>
                     <input type="text" formControlName="alternatePhone" id="profile-alt-phone-input"
+                              [readonly]="!isEditMode()"
+                             [class.readonly]="!isEditMode()"
                            class="form-input">
                   </div>
                   <div class="input-group col-span-1 md:col-span-2">
@@ -137,7 +139,6 @@
                     <div class="input-group">
                       <label class="input-label">Country</label>
                       <select formControlName="country" id="profile-country-select"
-                              [disabled]="!isEditMode()"
                               [class.readonly]="!isEditMode()"
                               class="form-input">
                         @for (country of countries; track country) {
@@ -157,7 +158,7 @@
               </div>
 
               <!-- Action Buttons (Only in Edit Mode) -->
-              @if (!isEditMode()) {
+              @if (isEditMode()) {
                 <div class="flex justify-end gap-4" id="profile-actions-container">
                   <button type="button" (click)="toggleEditMode()" id="profile-discard-btn"
                           class="discard-btn">

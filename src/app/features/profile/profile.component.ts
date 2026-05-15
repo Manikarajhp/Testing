@@ -12,7 +12,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../core/services/auth.service';
-import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { take } from 'rxjs/operators';
 
 @Component({
@@ -29,8 +28,7 @@ import { take } from 'rxjs/operators';
     MatRadioModule,
     MatSelectModule,
     MatFormFieldModule,
-    MatInputModule,
-    NavbarComponent
+    MatInputModule
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
@@ -72,12 +70,26 @@ export class ProfileComponent {
       gender: [user.gender || ''],
       pincode: [user.pincode || '', [Validators.pattern('^[0-9]{6}$')]]
     });
+    
+    // Set initial disabled state based on isEditMode
+    if (!this.isEditMode()) {
+      this.profileForm.disable();
+    } else {
+      this.profileForm.enable();
+      this.profileForm.get('email')?.disable();
+    }
   }
 
   toggleEditMode(): void {
     this.isEditMode.update(v => !v);
-    if (!this.isEditMode() && this.authService.currentUser()) {
-      this.initForm(this.authService.currentUser());
+    if (this.isEditMode()) {
+      this.profileForm.enable();
+      this.profileForm.get('email')?.disable();
+    } else {
+      const user = this.authService.currentUser();
+      if (user) {
+        this.initForm(user);
+      }
     }
   }
 
