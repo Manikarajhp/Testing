@@ -33,7 +33,7 @@ export class AuthService {
   private currentUserSignal = signal<User | null>(null);
   public currentUser = this.currentUserSignal.asReadonly();
   public isLoggedIn = computed(() => !!this.currentUserSignal());
-  
+
 
   constructor() {
     const savedUser = localStorage.getItem('currentUser');
@@ -105,7 +105,6 @@ export class AuthService {
   logout() {
     this.currentUserSignal.set(null);
     localStorage.removeItem('currentUser');
-
   }
 
   isEmailAvailable(email: string): boolean {

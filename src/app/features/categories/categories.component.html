@@ -1,0 +1,85 @@
+<main class="min-h-screen bg-gray-50">
+  
+  <!-- Hero Section -->
+  <section class="relative bg-indigo-900 py-20 overflow-hidden min-h-[400px] flex items-center">
+    <div class="absolute inset-0 z-0">
+      <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&auto=format&fit=crop&q=80"
+        class="w-full h-full object-cover opacity-20" alt="Hero background">
+      <div class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-indigo-900/90 to-transparent"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center md:text-left">
+      <div class="max-w-3xl">
+        <h1 class="text-5xl md:text-6xl font-black text-white mb-6 leading-tight">
+          Shop By <span class="text-indigo-400">Categories</span>
+        </h1>
+        <p class="text-xl text-indigo-100 max-w-2xl leading-relaxed">
+          Explore our curated collections across various industries and find exactly what fits your lifestyle.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Search & Filters -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
+    <div class="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
+      <div class="flex flex-col md:flex-row gap-6 items-center justify-between">
+        <div class="w-full relative md:max-w-md">
+          <mat-icon class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 z-10">search</mat-icon>
+          <input type="text" 
+                 [ngModel]="searchQuery()" 
+                 (ngModelChange)="onSearch($event)"
+                  placeholder="Search categories..." 
+                  class="search-input">
+        </div>
+
+        <div class="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
+          <div class="flex items-center gap-2 text-sm font-bold text-gray-400">
+            <span class="bg-indigo-50 text-indigo-600 px-3 py-1 rounded-lg">{{ filteredCategories().length }}</span>
+            <span>Results</span>
+          </div>
+
+          <div class="h-8 w-px bg-gray-100 hidden md:block"></div>
+
+          <button mat-button [matMenuTriggerFor]="sortMenu" class="sort-select-btn">
+            <mat-icon class="mr-1">sort</mat-icon>
+            {{ sortOption() === 'name' ? 'A-Z' : 'Popular' }}
+          </button>
+
+          <mat-menu #sortMenu="matMenu" class="modern-dropdown-menu">
+            <button mat-menu-item (click)="setSort('name')">
+              <mat-icon [class.text-indigo-600]="sortOption() === 'name'">sort_by_alpha</mat-icon>
+              <span>Alphabetical</span>
+            </button>
+            <button mat-menu-item (click)="setSort('count')">
+              <mat-icon [class.text-indigo-600]="sortOption() === 'count'">trending_up</mat-icon>
+              <span>Most Products</span>
+            </button>
+          </mat-menu>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories Grid -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div *ngIf="filteredCategories().length > 0; else noResults"
+      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <div *ngFor="let category of filteredCategories()" class="animate-fade-in h-full">
+        <app-category-card [category]="category"></app-category-card>
+      </div>
+    </div>
+
+    <ng-template #noResults>
+      <div class="text-center py-24 bg-white rounded-3xl shadow-sm border border-gray-100">
+        <mat-icon class="text-8xl text-gray-100 mb-6 block h-auto w-auto">search_off</mat-icon>
+        <h3 class="text-2xl font-bold text-gray-900 mb-2">No categories match your search</h3>
+        <p class="text-gray-500">Try searching for something else like "Electronics" or "Fashion".</p>
+        <button (click)="onSearch('')"
+          class="mt-8 px-8 py-3 bg-indigo-600 text-white rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200">
+          Clear Search
+        </button>
+      </div>
+    </ng-template>
+  </section>
+</main>
