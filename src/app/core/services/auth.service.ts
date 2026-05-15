@@ -19,6 +19,7 @@ export class AuthService {
       city: 'ShopCity',
       state: 'TechState',
       country: 'Webland',
+      gender: 'male',
       pincode: '123456',
       avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=John',
       role: 'user',

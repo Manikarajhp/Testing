@@ -93,6 +93,16 @@
                            [class.readonly]="!isEditMode()"
                            class="form-input">
                   </div>
+                  <div class="input-group col-span-1 md:col-span-2">
+                    <label class="input-label">Gender</label>
+                    <mat-radio-group formControlName="gender" id="profile-gender-input" class="flex gap-4 mt-2">
+                      @for (gender of genders; track gender) {
+                        <mat-radio-button [value]="gender" [disabled]="!isEditMode()">
+                          {{ gender | titlecase }}
+                        </mat-radio-button>
+                      }
+                    </mat-radio-group>
+                  </div>
                 </div>
               </div>
 
@@ -129,10 +139,14 @@
                     </div>
                     <div class="input-group">
                       <label class="input-label">Country</label>
-                      <input type="text" formControlName="country" id="profile-country-input"
-                             [readonly]="!isEditMode()"
-                             [class.readonly]="!isEditMode()"
-                             class="form-input">
+                      <select formControlName="country" id="profile-country-select"
+                              [disabled]="!isEditMode()"
+                              [class.readonly]="!isEditMode()"
+                              class="form-input">
+                        @for (country of countries; track country) {
+                          <option [value]="country">{{ country }}</option>
+                        }
+                      </select>
                     </div>
                     <div class="input-group">
                       <label class="input-label">Pincode</label>
