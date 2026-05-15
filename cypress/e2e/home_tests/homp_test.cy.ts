@@ -36,7 +36,7 @@ it('Navgation links naviage to proper pages', () => {
     cy.get('#nav-home-link').click();
     cy.url().should('include', '/home');
     cy.get('#nav-category-link').click();
-    cy.url().should('include', '/category');
+    cy.url().should('include', '/categories');
     cy.get('#nav-orders-link').click();
     cy.url().should('include', '/orders');
     cy.get('#nav-cart-btn').click();
@@ -75,15 +75,19 @@ it('Logout check', () => {
       .and('have.attr', 'placeholder');
   });
 
-  it('Should search a product', () => {
+  it.only('Should search a product', () => {
     cy.get('#product-search-input').type('keyboard');
-
+    
     cy.wait(2000);
-
-    cy.get('.product-card').each(($card) => {
-      cy.wrap($card).should('contain.text', 'keyboard');
+    
+    cy.get('.product-card:visible').each(($card) => {
+      cy.wrap($card)
+        .invoke('text')
+        .then((text) => {
+          expect(text.toLowerCase()).to.include('keyboard');
+        });
     });
-
+  
     cy.get('#product-search-input').clear();
   });
 

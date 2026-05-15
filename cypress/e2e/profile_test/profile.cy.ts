@@ -122,9 +122,11 @@ describe('Profile Tests', () => {
       .should('be.visible')
 
     cy.get(selectors.avatar)
-      .should('be.visible')
-      .and('have.attr', 'src')
-      .and('have.attr', 'alt')
+    .should('be.visible')
+    .and('have.attr', 'src')
+    
+    cy.get(selectors.avatar)
+      .should('have.attr', 'alt')
 
     cy.get(selectors.emailSubtitle)
       .should('be.visible')
