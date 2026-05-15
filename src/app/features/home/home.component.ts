@@ -14,7 +14,10 @@ import { Product } from '../../core/models/product.model';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
 import { debounceTime, distinctUntilChanged, switchMap, startWith } from 'rxjs/operators';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { toSignal, toObservable } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
+import { combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -39,15 +42,35 @@ export class HomeComponent {
   private productService = inject(ProductService);
   private cartService = inject(CartService);
   private snackBar = inject(MatSnackBar);
+  private route = inject(ActivatedRoute);
   
   searchControl = new FormControl('');
+
+  private routeParams$ = this.route.paramMap.pipe(
+    map(params => params.get('type'))
+  );
+
+  currentCategory = toSignal(this.routeParams$);
+
+  private searchQuery$ = this.searchControl.valueChanges.pipe(
+    startWith(''),
+    debounceTime(300),
+    distinctUntilChanged()
+  );
   
   products = toSignal(
-    this.searchControl.valueChanges.pipe(
-      startWith(''),
-      debounceTime(300),
-      distinctUntilChanged(),
-      switchMap(query => this.productService.searchProducts(query || ''))
+    combineLatest([this.routeParams$, this.searchQuery$]).pipe(
+      switchMap(([category, query]) => {
+        if (category) {
+          // If category is provided in route, filter by category AND query
+          return this.productService.searchProducts(query || '').pipe(
+            map(products => products.filter(p => 
+              p.category.toLowerCase() === category.toLowerCase()
+            ))
+          );
+        }
+        return this.productService.searchProducts(query || '');
+      })
     ),
     { initialValue: [] }
   );
