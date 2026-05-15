@@ -88,8 +88,6 @@
                   <div class="input-group">
                     <label class="input-label">Alt. Phone Number</label>
                     <input type="text" formControlName="alternatePhone" id="profile-alt-phone-input"
-                           [readonly]="!isEditMode()"
-                           [class.readonly]="!isEditMode()"
                            class="form-input">
                   </div>
                   <div class="input-group col-span-1 md:col-span-2">
@@ -159,7 +157,7 @@
               </div>
 
               <!-- Action Buttons (Only in Edit Mode) -->
-              @if (isEditMode()) {
+              @if (!isEditMode()) {
                 <div class="flex justify-end gap-4" id="profile-actions-container">
                   <button type="button" (click)="toggleEditMode()" id="profile-discard-btn"
                           class="discard-btn">
