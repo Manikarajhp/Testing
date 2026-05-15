@@ -15,6 +15,15 @@ describe('Login page testing', () => {
     cy.url().should("include", "/home");
   })
 
+  it.only('Valid email and password and login to the application with enter', () => {
+    cy.get("#signin-email").type("john@example.com");
+    cy.get("#signin-password").type("Password123!{enter}");
+
+    cy.contains("Welcome back,").should("be.visible");
+
+    cy.url().should("include", "/home");
+  })
+
   it('InValid email and password and login to the application', () => {
     cy.get("#signin-email").type("john123@example.com");
     cy.get("#signin-password").type("Pas234sword123!");
