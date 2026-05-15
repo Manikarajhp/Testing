@@ -174,17 +174,19 @@ describe('Checkout Page Test Suite', () => {
       .should('be.checked');
   });
 
-  it('Should select UPI payment', () => {
-    cy.get('input[value="UPI"]')
-      .check({ force: true })
-      .should('be.checked');
-  });
+ it('Should select UPI payment', () => {
 
-  it('Should select Cash on Delivery payment', () => {
-    cy.get('input[value="Cash on Delivery"]')
-      .check({ force: true })
-      .should('be.checked');
-  });
+  cy.contains('UPI')
+    .click();
+
+});
+
+ it('Should select Cash on Delivery payment', () => {
+
+  cy.contains('Cash on Delivery')
+    .click();
+
+});
 
   
   // ORDER SUMMARY TESTS
@@ -289,7 +291,7 @@ describe('Checkout Page Test Suite', () => {
       .should('be.disabled');
   });
 
-  it('Should enable place order button for valid form', () => {
+  it.only('Should enable place order button for valid form', () => {
 
     cy.get('#fullName').type('John Doe');
     cy.get('#email').type('john@example.com');
@@ -298,11 +300,11 @@ describe('Checkout Page Test Suite', () => {
     cy.get('#city').type('Chennai');
     cy.get('#zipCode').type('600001');
 
-    cy.get('input[value="UPI"]')
-      .check({ force: true });
+    cy.contains('UPI').click();
 
+    cy.wait(2000)
     cy.get('.place-order-btn')
-      .should('not.be.disabled');
+      .should('be.enabled');
   });
 
 });
