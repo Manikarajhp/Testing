@@ -1,0 +1,80 @@
+<div class="min-h-screen bg-gray-50 pb-20">
+  <!-- Hero Section -->
+  <section class="relative bg-indigo-900 py-20 overflow-hidden min-h-[400px] flex items-center">
+    <div class="absolute inset-0 z-0">
+      <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&auto=format&fit=crop&q=80" 
+           class="w-full h-full object-cover opacity-20" alt="Hero background">
+      <div class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-indigo-900/90 to-transparent"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center md:text-left">
+      <div class="max-w-3xl">
+        <h1 class="text-5xl md:text-6xl font-black text-white mb-6 leading-tight">
+          Your Shopping <span class="text-indigo-400">Cart</span>
+        </h1>
+        <p class="text-xl text-indigo-100 max-w-2xl leading-relaxed">
+          Review your items, adjust quantities, and proceed to checkout when you're ready.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-20">
+
+  <div *ngIf="cartItems().length > 0; else emptyCart" class="cart-content">
+    <div class="cart-items">
+      <div *ngFor="let item of cartItems()" class="cart-card">
+        <div class="product-image">
+          <img [src]="item.product.image" [alt]="item.product.title">
+        </div>
+        <div class="product-info">
+          <h3>{{ item.product.title }}</h3>
+          <p class="description">{{ item.product.description | slice:0:80 }}...</p>
+          <div class="price-row">
+            <span class="unit-price">${{ item.product.price }}</span>
+            <div class="quantity-controls">
+              <button (click)="decreaseQuantity(item.product.id, item.quantity)" class="qty-btn">-</button>
+              <span class="qty-value">{{ item.quantity }}</span>
+              <button (click)="increaseQuantity(item.product.id, item.quantity)" class="qty-btn">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="item-actions">
+          <span class="total-item-price">${{ (item.product.price * item.quantity) | number:'1.2-2' }}</span>
+          <button (click)="removeItem(item.product.id)" class="remove-btn">
+            <i class="ri-delete-bin-line"></i> Remove
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-summary">
+      <h2>Order Summary</h2>
+      <div class="summary-details">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>${{ totalPrice() | number:'1.2-2' }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span class="free">FREE</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span>${{ totalPrice() | number:'1.2-2' }}</span>
+        </div>
+      </div>
+      <button routerLink="/checkout" class="checkout-btn">Proceed to Checkout</button>
+      <a routerLink="/home" class="continue-shopping">Continue Shopping</a>
+    </div>
+  </div>
+
+  <ng-template #emptyCart>
+    <div class="empty-cart">
+      <div class="empty-icon">🛒</div>
+      <h2>Your cart is empty</h2>
+      <p>Looks like you haven't added anything to your cart yet.</p>
+      <button routerLink="/home" class="shop-now-btn">Shop Now</button>
+    </div>
+  </ng-template>
+</div>
