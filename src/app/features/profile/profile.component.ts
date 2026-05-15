@@ -7,6 +7,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { AuthService } from '../../core/services/auth.service';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { take } from 'rxjs/operators';
@@ -22,6 +26,10 @@ import { take } from 'rxjs/operators';
     MatCardModule, 
     MatDividerModule,
     MatSnackBarModule,
+    MatRadioModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    MatInputModule,
     NavbarComponent
   ],
   templateUrl: './profile.component.html',
@@ -37,6 +45,8 @@ export class ProfileComponent {
   profileForm!: FormGroup;
   isEditMode = signal(false);
   isLoading = signal(false);
+  countries = ['India', 'USA', 'UK', 'Australia', 'Canada', 'Singapore'];
+  genders = ['male', 'female', 'other'];
 
   constructor() {
     effect(() => {
@@ -59,6 +69,7 @@ export class ProfileComponent {
       city: [user.city || ''],
       state: [user.state || ''],
       country: [user.country || ''],
+      gender: [user.gender || ''],
       pincode: [user.pincode || '', [Validators.pattern('^[0-9]{6}$')]]
     });
   }

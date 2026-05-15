@@ -10,6 +10,7 @@ export interface User {
   city?: string;
   state?: string;
   country?: string;
+  gender?: string;
   pincode?: string;
   avatar: string;
   role: 'user' | 'admin';
