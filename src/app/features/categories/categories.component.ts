@@ -9,6 +9,10 @@ import { Category } from '../../core/models/category.model';
 import { CategoryCardComponent } from '../../shared/components/category-card/category-card.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
+import { Product } from '../../core/models/product.model';
+import { CartService } from '../../core/services/cart.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -23,7 +27,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatMenuModule,
     MatButtonModule,
     CategoryCardComponent,
-
+    RouterModule,
+    MatSnackBarModule
 ],
   templateUrl: './categories.component.html',
   styleUrl: './categories.component.scss'
@@ -33,12 +38,22 @@ export class CategoriesComponent implements OnInit {
 
   allCategories = signal<Category[]>([]);
   filteredCategories = signal<Category[]>([]);
+  allProducts = signal<Product[]>([]);
+  filteredProducts = signal<Product[]>([]);
   searchQuery = signal('');
   sortOption = signal<'name' | 'count'>('name');
+
+  private cartService = inject(CartService);
+  private snackBar = inject(MatSnackBar);
 
   ngOnInit() {
     this.productService.getCategories().subscribe(categories => {
       this.allCategories.set(categories);
+      this.applyFiltersAndSort();
+    });
+
+    this.productService.getProducts().subscribe(products => {
+      this.allProducts.set(products);
       this.applyFiltersAndSort();
     });
   }
@@ -66,5 +81,25 @@ export class CategoriesComponent implements OnInit {
     }
 
     this.filteredCategories.set(result);
+
+    // Filter products
+    if (this.searchQuery()) {
+      const productResult = this.allProducts().filter(p => 
+        p.title.toLowerCase().includes(this.searchQuery().toLowerCase()) ||
+        p.category.toLowerCase().includes(this.searchQuery().toLowerCase()) ||
+        p.description.toLowerCase().includes(this.searchQuery().toLowerCase())
+      );
+      this.filteredProducts.set(productResult);
+    } else {
+      this.filteredProducts.set([]);
+    }
+  }
+
+  addToCart(product: Product) {
+    this.cartService.addToCart(product);
+    this.snackBar.open(`${product.title} added to cart! 🛒`, 'Close', {
+      duration: 3000,
+      panelClass: ['bg-indigo-600', 'text-white']
+    });
   }
 }

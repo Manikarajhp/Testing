@@ -11,10 +11,18 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
       <div class="max-w-2xl">
         <h1 class="text-5xl md:text-6xl font-black text-white leading-tight mb-6">
-          Upgrade Your <span class="text-indigo-400">Lifestyle</span> with SHOP.
+          @if (currentCategory()) {
+            Explore our <span class="text-indigo-400">{{ currentCategory() | titlecase }}</span> Collection.
+          } @else {
+            Upgrade Your <span class="text-indigo-400">Lifestyle</span> with SHOP.
+          }
         </h1>
         <p class="text-xl text-indigo-100 mb-8 max-w-lg">
-          Discover our curated collection of premium gadgets, accessories, and fashion items designed for the modern world.
+          @if (currentCategory()) {
+            Discover the best {{ currentCategory() }} products handpicked for quality and style.
+          } @else {
+            Discover our curated collection of premium gadgets, accessories, and fashion items designed for the modern world.
+          }
         </p>
       </div>
     </div>
@@ -39,8 +47,12 @@
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <div class="flex justify-between items-center mb-10">
       <div>
-        <h2 class="text-3xl font-bold text-gray-900">Featured Products</h2>
-        <p class="text-gray-500 mt-1">Handpicked quality items just for you</p>
+        <h2 class="text-3xl font-bold text-gray-900">
+          {{ currentCategory() ? (currentCategory() | titlecase) + ' Products' : 'Featured Products' }}
+        </h2>
+        <p class="text-gray-500 mt-1">
+          {{ currentCategory() ? 'Showing all items in ' + currentCategory() : 'Handpicked quality items just for you' }}
+        </p>
       </div>
       <button mat-button color="primary" class="font-bold" id="view-all-products-btn">View All</button>
     </div>
@@ -89,6 +101,10 @@
               <span class="product-price">{{ product.price | currency }}</span>
               <div class="flex space-x-2">
 
+                <button mat-button class="view-btn !rounded-xl !px-4"
+                        [routerLink]="['/products', product.id]">
+                  View Details
+                </button>
                 <button mat-icon-button class="add-cart-btn" 
                         (click)="$event.stopPropagation(); addToCart(product)"
                         [attr.id]="'add-to-cart-btn-' + product.id">
