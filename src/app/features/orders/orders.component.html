@@ -2,12 +2,19 @@
   <!-- Hero Section -->
   <section class="relative bg-indigo-900 py-20 overflow-hidden min-h-[400px] flex items-center">
     <div class="absolute inset-0 z-0">
-      <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&auto=format&fit=crop&q=80"
-        class="w-full h-full object-cover opacity-20" alt="Hero background">
-      <div class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-indigo-900/90 to-transparent"></div>
+      <img
+        src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&auto=format&fit=crop&q=80"
+        class="w-full h-full object-cover opacity-20"
+        alt="Hero background"
+      />
+      <div
+        class="absolute inset-0 bg-gradient-to-br from-indigo-900 via-indigo-900/90 to-transparent"
+      ></div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center md:text-left">
+    <div
+      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full text-center md:text-left"
+    >
       <div class="max-w-3xl">
         <h1 class="text-5xl md:text-6xl font-black text-white mb-6 leading-tight">
           My <span class="text-indigo-400">Orders</span>
@@ -20,63 +27,68 @@
   </section>
 
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-20">
-
-    <div *ngIf="orders().length > 0; else noOrders" class="orders-list">
-      <div *ngFor="let order of orders()" class="order-card">
-        <div class="order-header">
-          <div class="order-meta">
-            <div class="meta-item">
-              <span class="label">Order Number</span>
-              <span class="value">#{{ order.id }}</span>
-            </div>
-            <div class="meta-item">
-              <span class="label">Date Placed</span>
-              <span class="value">{{ order.orderDate | date:'mediumDate' }}</span>
-            </div>
-            <div class="meta-item">
-              <span class="label">Total Amount</span>
-              <span class="value total">${{ order.totalAmount | number:'1.2-2' }}</span>
-            </div>
-          </div>
-          <div class="order-status" [attr.data-status]="order.status">
-            <span class="status-dot"></span>
-            {{ order.status }}
-          </div>
-        </div>
-
-        <div class="order-items">
-          <div *ngFor="let item of order.items" class="order-item">
-            <img [src]="item.product.image" [alt]="item.product.title">
-            <div class="item-info">
-              <h4>{{ item.product.title }}</h4>
-              <div class="item-meta">
-                <span>Qty: {{ item.quantity }}</span>
-                <span class="separator">•</span>
-                <span>${{ item.product.price }} each</span>
+    @if (orders().length > 0) {
+      <div class="orders-list">
+        @for (order of orders(); track order) {
+          <div class="order-card">
+            <div class="order-header">
+              <div class="order-meta">
+                <div class="meta-item">
+                  <span class="label">Order Number</span>
+                  <span class="value">#{{ order.id }}</span>
+                </div>
+                <div class="meta-item">
+                  <span class="label">Date Placed</span>
+                  <span class="value">{{ order.orderDate | date: 'mediumDate' }}</span>
+                </div>
+                <div class="meta-item">
+                  <span class="label">Total Amount</span>
+                  <span class="value total">${{ order.totalAmount | number: '1.2-2' }}</span>
+                </div>
+              </div>
+              <div class="order-status" [attr.data-status]="order.status">
+                <span class="status-dot"></span>
+                {{ order.status }}
               </div>
             </div>
-            <div class="item-total">
-              ${{ (item.product.price * item.quantity) | number:'1.2-2' }}
+            <div class="order-items">
+              @for (item of order.items; track item) {
+                <div class="order-item">
+                  <img [src]="item.product.image" [alt]="item.product.title" />
+                  <div class="item-info">
+                    <h4>{{ item.product.title }}</h4>
+                    <div class="item-meta">
+                      <span>Qty: {{ item.quantity }}</span>
+                      <span class="separator">•</span>
+                      <span>${{ item.product.price }} each</span>
+                    </div>
+                  </div>
+                  <div class="item-total">
+                    ${{ item.product.price * item.quantity | number: '1.2-2' }}
+                  </div>
+                </div>
+              }
+            </div>
+            <div class="order-footer">
+              <div class="customer-preview">
+                <i class="ri-map-pin-line"></i>
+                <span
+                  >Delivering to {{ order.customerDetails.fullName }},
+                  {{ order.customerDetails.city }}</span
+                >
+              </div>
+              <button class="view-details-btn">View Details</button>
             </div>
           </div>
-        </div>
-
-        <div class="order-footer">
-          <div class="customer-preview">
-            <i class="ri-map-pin-line"></i>
-            <span>Delivering to {{ order.customerDetails.fullName }}, {{ order.customerDetails.city }}</span>
-          </div>
-          <button class="view-details-btn">View Details</button>
-        </div>
+        }
       </div>
-    </div>
-
-    <ng-template #noOrders>
+    } @else {
       <div class="empty-state">
         <div class="empty-icon">📦</div>
         <h2>No orders yet</h2>
         <p>You haven't placed any orders yet. Start shopping to see your orders here!</p>
         <button routerLink="/home" class="shop-now-btn">Start Shopping</button>
       </div>
-    </ng-template>
+    }
   </div>
+</div>

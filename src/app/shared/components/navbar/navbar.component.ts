@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -10,17 +10,17 @@ import { CartService } from '../../../core/services/cart.service';
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule, MatIconModule, MatButtonModule, MatToolbarModule],
+  imports: [RouterModule, MatIconModule, MatButtonModule, MatToolbarModule],
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+  styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent {
   authService = inject(AuthService);
   cartService = inject(CartService);
-  
+
   isMenuOpen = signal(false);
 
   toggleMenu() {
-    this.isMenuOpen.update(v => !v);
+    this.isMenuOpen.update((v) => !v);
   }
 }
