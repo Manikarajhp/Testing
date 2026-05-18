@@ -36,13 +36,13 @@ export class AuthComponent {
   successMessage = signal('');
 
   signInForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.email, CustomValidators.eMailCom()]],
     password: ['', [Validators.required]]
   });
 
   signUpForm: FormGroup = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
-    email: ['', [Validators.required, Validators.email]],
+    email: ['', [Validators.required, Validators.email, , CustomValidators.eMailCom()]],
     password: ['', [Validators.required, CustomValidators.passwordStrength()]],
     confirmPassword: ['', [Validators.required]]
   }, {

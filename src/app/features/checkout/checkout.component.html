@@ -83,7 +83,7 @@
           </div>
         </div>
 
-        <button type="submit" class="place-order-btn" [disabled]="checkoutForm.invalid || cartItems().length === 0">
+        <button type="submit" class="place-order-btn" [disabled]="checkoutForm.invalid">
           Place Order (${{ totalPrice() | number:'1.2-2' }})
         </button>
       </form>

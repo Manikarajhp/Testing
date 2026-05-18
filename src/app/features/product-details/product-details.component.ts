@@ -8,7 +8,6 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ProductService, Review } from '../../core/services/product.service';
 import { CartService } from '../../core/services/cart.service';
 import { Product } from '../../core/models/product.model';
-import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { switchMap, tap } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -16,22 +15,21 @@ import { toSignal } from '@angular/core/rxjs-interop';
   selector: 'app-product-details',
   standalone: true,
   imports: [
-    CommonModule, 
-    RouterModule, 
-    NavbarComponent,
-    MatIconModule, 
-    MatButtonModule, 
+    CommonModule,
+    RouterModule,
+    MatIconModule,
+    MatButtonModule,
     MatDividerModule,
     MatSnackBarModule
-  ],
+],
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.scss']
 })
 export class ProductDetailsComponent {
-  private route = inject(ActivatedRoute);
-  private productService = inject(ProductService);
-  private cartService = inject(CartService);
-  private snackBar = inject(MatSnackBar);
+  private readonly route = inject(ActivatedRoute);
+  private readonly productService = inject(ProductService);
+  private readonly cartService = inject(CartService);
+  private readonly snackBar = inject(MatSnackBar);
 
   reviews = signal<Review[]>([]);
   quantity = signal(1);

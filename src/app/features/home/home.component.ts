@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,13 +11,10 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ProductService } from '../../core/services/product.service';
 import { CartService } from '../../core/services/cart.service';
 import { Product } from '../../core/models/product.model';
-import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { FooterComponent } from '../../shared/components/footer/footer.component';
-import { debounceTime, distinctUntilChanged, switchMap, startWith } from 'rxjs/operators';
-import { toSignal, toObservable } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { debounceTime, distinctUntilChanged, switchMap, startWith, map } from 'rxjs/operators';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -25,8 +22,7 @@ import { map } from 'rxjs/operators';
   imports: [
     CommonModule, 
     ReactiveFormsModule, 
-    RouterModule, 
-    NavbarComponent,
+    RouterModule,
     FooterComponent,
     MatIconModule, 
     MatButtonModule, 
@@ -39,20 +35,20 @@ import { map } from 'rxjs/operators';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  private productService = inject(ProductService);
-  private cartService = inject(CartService);
-  private snackBar = inject(MatSnackBar);
-  private route = inject(ActivatedRoute);
+  private readonly productService = inject(ProductService);
+  private readonly cartService = inject(CartService);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly route = inject(ActivatedRoute);
   
   searchControl = new FormControl('');
 
-  private routeParams$ = this.route.paramMap.pipe(
+  private readonly routeParams$ = this.route.paramMap.pipe(
     map(params => params.get('type'))
   );
 
   currentCategory = toSignal(this.routeParams$);
 
-  private searchQuery$ = this.searchControl.valueChanges.pipe(
+  private readonly searchQuery$ = this.searchControl.valueChanges.pipe(
     startWith(''),
     debounceTime(300),
     distinctUntilChanged()

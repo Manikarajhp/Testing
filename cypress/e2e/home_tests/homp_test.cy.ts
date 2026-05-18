@@ -75,7 +75,7 @@ it('Logout check', () => {
       .and('have.attr', 'placeholder');
   });
 
-  it.only('Should search a product', () => {
+  it('Should search a product', () => {
     cy.get('#product-search-input').type('keyboard');
     
     cy.wait(2000);
