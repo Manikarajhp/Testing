@@ -291,7 +291,7 @@ describe('Checkout Page Test Suite', () => {
       .should('be.disabled');
   });
 
-  it.only('Should enable place order button for valid form', () => {
+  it('Should enable place order button for valid form', () => {
 
     cy.get('#fullName').type('John Doe');
     cy.get('#email').type('john@example.com');

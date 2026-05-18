@@ -214,9 +214,9 @@ describe('Profile Tests', () => {
 
   it('should allow selecting gender', () => {
 
-    enableEditMode()
+    enableEditMode();
 
-    ;['male', 'female', 'other'].forEach((gender) => {
+    ['male', 'female', 'other'].forEach((gender) => {
 
       cy.get(`input[type="radio"][value="${gender}"]`)
         .check({ force: true })
