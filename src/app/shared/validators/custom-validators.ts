@@ -39,4 +39,14 @@ export class CustomValidators {
       return !passwordValid ? { passwordStrength: true } : null;
     };
   }
+
+  static eMailCom() : ValidatorFn {
+    return (control: AbstractControl) : ValidationErrors | null => {
+      const value = control.value;
+      if(!value) return null;
+
+      return !(value.slice(-4) === ".com") ? {eMailCom: true} : null;
+
+    };
+  }
 }

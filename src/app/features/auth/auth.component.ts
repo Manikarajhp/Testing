@@ -36,21 +36,18 @@ export class AuthComponent {
   successMessage = signal('');
 
   signInForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
+    email: ['', [Validators.required, Validators.email, CustomValidators.eMailCom()]],
+    password: ['', [Validators.required]]
   });
 
-  signUpForm: FormGroup = this.fb.group(
-    {
-      username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, CustomValidators.passwordStrength()]],
-      confirmPassword: ['', [Validators.required]],
-    },
-    {
-      validators: [CustomValidators.match('password', 'confirmPassword')],
-    },
-  );
+  signUpForm: FormGroup = this.fb.group({
+    username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
+    email: ['', [Validators.required, Validators.email, , CustomValidators.eMailCom()]],
+    password: ['', [Validators.required, CustomValidators.passwordStrength()]],
+    confirmPassword: ['', [Validators.required]]
+  }, {
+    validators: [CustomValidators.match('password', 'confirmPassword')]
+  });
 
   toggleForm(): void {
     this.isSignIn.update((v) => !v);

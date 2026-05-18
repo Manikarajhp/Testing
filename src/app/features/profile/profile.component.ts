@@ -34,11 +34,11 @@ import { take } from 'rxjs/operators';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent {
-  private fb = inject(FormBuilder);
+  private readonly fb = inject(FormBuilder);
   public authService = inject(AuthService);
-  private snackBar = inject(MatSnackBar);
-  private cdr = inject(ChangeDetectorRef);
-  private router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly router = inject(Router);
 
   profileForm!: FormGroup;
   isEditMode = signal(false);
@@ -72,11 +72,11 @@ export class ProfileComponent {
     });
     
     // Set initial disabled state based on isEditMode
-    if (!this.isEditMode()) {
-      this.profileForm.disable();
-    } else {
+    if (this.isEditMode()) {
       this.profileForm.enable();
       this.profileForm.get('email')?.disable();
+    } else {
+      this.profileForm.disable();
     }
   }
 

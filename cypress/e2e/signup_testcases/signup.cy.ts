@@ -45,6 +45,7 @@ describe('Signup functionality tests', () => {
         signup_confirmpassword('Password123!')
         signup_submit();
 
+        cy.wait(2000)
         cy.url().should('include','/home');
     })
 

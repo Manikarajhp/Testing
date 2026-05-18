@@ -75,8 +75,9 @@ it('Logout check', () => {
       .and('have.attr', 'placeholder');
   });
 
-  it.only('Should search a product', () => {
-    cy.get('#product-search-input').type('keyboard');
+  it('Should search a product', () => {
+    const search = "keyboard"
+    cy.get('#product-search-input').type(search);
     
     cy.wait(2000);
     
@@ -84,7 +85,7 @@ it('Logout check', () => {
       cy.wrap($card)
         .invoke('text')
         .then((text) => {
-          expect(text.toLowerCase()).to.include('keyboard');
+          expect(text.toLowerCase()).to.include(search);
         });
     });
   
