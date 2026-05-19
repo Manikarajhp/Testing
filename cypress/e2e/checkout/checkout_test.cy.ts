@@ -8,7 +8,6 @@ describe('Checkout Page Test Suite', () => {
 
   
   // PAGE LOAD TESTS
-  
 
   it('Should load checkout page', () => {
     cy.contains('Checkout')
@@ -22,7 +21,6 @@ describe('Checkout Page Test Suite', () => {
 
   
   // SHIPPING INFORMATION TESTS
-  
 
   it('Should display shipping information section', () => {
     cy.contains('Shipping Information')

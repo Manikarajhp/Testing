@@ -35,3 +35,12 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add('login', () => {
+        cy.visit('http://localhost:4200/login');
+        cy.fixture('login').then((data) => {
+            cy.get('#signin-email').type(data.email);
+            cy.get('#signin-password').type(data.password);
+            cy.get('#signin-submit').click();
+        })
+    })
