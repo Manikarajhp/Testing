@@ -30,7 +30,7 @@
               </span>
               <div class="flex items-center space-x-1" id="product-rating-container">
                 <mat-icon class="text-yellow-400">star</mat-icon>
-                <span class="font-bold text-gray-700" id="product-rating-value">{{ product.rating }}</span>
+                <span class="font-bold text-gray-700" id="product-rating-value">{{ product.rating.rate }}</span>
                 <span class="text-gray-400">(120 Reviews)</span>
               </div>
             </div>
@@ -55,7 +55,7 @@
                 <span class="text-gray-700" id="product-stock-status">In Stock</span>
               </div>
               <div class="text-gray-400 text-sm" id="product-stock-count">
-                <span id="product-stock-value">{{ product.stock }}</span> units available
+                <span id="product-stock-value">{{ product.stock ||10 }}</span> units available
               </div>
             </div>
 
@@ -68,7 +68,7 @@
                   <mat-icon>remove</mat-icon>
                 </button>
                 <span class="w-12 text-center font-black text-lg" id="product-quantity-display">{{ quantity() }}</span>
-                <button mat-icon-button (click)="incrementQuantity()" [disabled]="quantity() >= product.stock" id="increase-quantity-btn"
+                <button mat-icon-button (click)="incrementQuantity()" [disabled]="quantity() >= (product.stock ||10 )" id="increase-quantity-btn"
                         class="w-10 h-10 leading-10 hover:bg-white hover:shadow-sm transition-all">
                   <mat-icon>add</mat-icon>
                 </button>

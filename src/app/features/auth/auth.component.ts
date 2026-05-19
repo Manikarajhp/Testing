@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -9,20 +9,20 @@ import { animate, style, transition, trigger } from '@angular/animations';
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
   animations: [
     trigger('fadeSlide', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateX(20px)' }),
-        animate('300ms ease-out', style({ opacity: 1, transform: 'translateX(0)' }))
+        animate('300ms ease-out', style({ opacity: 1, transform: 'translateX(0)' })),
       ]),
       transition(':leave', [
-        animate('300ms ease-in', style({ opacity: 0, transform: 'translateX(-20px)' }))
-      ])
-    ])
-  ]
+        animate('300ms ease-in', style({ opacity: 0, transform: 'translateX(-20px)' })),
+      ]),
+    ]),
+  ],
 })
 export class AuthComponent {
   private fb = inject(FormBuilder);
@@ -50,7 +50,7 @@ export class AuthComponent {
   });
 
   toggleForm(): void {
-    this.isSignIn.update(v => !v);
+    this.isSignIn.update((v) => !v);
     this.errorMessage.set('');
     this.successMessage.set('');
     this.signInForm.reset();
@@ -58,7 +58,7 @@ export class AuthComponent {
   }
 
   togglePasswordVisibility(): void {
-    this.showPassword.update(v => !v);
+    this.showPassword.update((v) => !v);
   }
 
   onSignIn(): void {
@@ -77,7 +77,7 @@ export class AuthComponent {
       error: (err) => {
         this.isLoading.set(false);
         this.errorMessage.set(err.message || 'Login failed. Please try again.');
-      }
+      },
     });
   }
 
@@ -86,7 +86,7 @@ export class AuthComponent {
 
     this.isLoading.set(true);
     this.errorMessage.set('');
-    
+
     if (!this.authService.isEmailAvailable(this.signUpForm.value.email)) {
       this.isLoading.set(false);
       this.errorMessage.set('Email already exists. Please use a different one.');
@@ -105,12 +105,14 @@ export class AuthComponent {
       error: (err) => {
         this.isLoading.set(false);
         this.errorMessage.set(err.message || 'Registration failed. Please try again.');
-      }
+      },
     });
   }
 
   getControl(formName: 'signIn' | 'signUp', controlName: string) {
-    return formName === 'signIn' ? this.signInForm.get(controlName) : this.signUpForm.get(controlName);
+    return formName === 'signIn'
+      ? this.signInForm.get(controlName)
+      : this.signUpForm.get(controlName);
   }
 
   isInvalid(formName: 'signIn' | 'signUp', controlName: string): boolean {

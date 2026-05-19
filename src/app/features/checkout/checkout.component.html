@@ -7,51 +7,60 @@
           <h2>Shipping Information</h2>
           <div class="form-group">
             <label for="fullName">Full Name</label>
-            <input type="text" id="fullName" formControlName="fullName" placeholder="John Doe">
-            <div *ngIf="checkoutForm.get('fullName')?.touched && checkoutForm.get('fullName')?.invalid" class="error">
-              Full name is required (min 3 chars).
-            </div>
+            <input type="text" id="fullName" formControlName="fullName" placeholder="John Doe" />
+            @if (checkoutForm.get('fullName')?.touched && checkoutForm.get('fullName')?.invalid) {
+              <div class="error">Full name is required (min 3 chars).</div>
+            }
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label for="email">Email Address</label>
-              <input type="email" id="email" formControlName="email" placeholder="john@example.com">
-              <div *ngIf="checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid" class="error">
-                Valid email is required.
-              </div>
+              <input
+                type="email"
+                id="email"
+                formControlName="email"
+                placeholder="john@example.com"
+              />
+              @if (checkoutForm.get('email')?.touched && checkoutForm.get('email')?.invalid) {
+                <div class="error">Valid email is required.</div>
+              }
             </div>
             <div class="form-group">
               <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" formControlName="phone" placeholder="1234567890">
-              <div *ngIf="checkoutForm.get('phone')?.touched && checkoutForm.get('phone')?.invalid" class="error">
-                Valid 10-digit phone number is required.
-              </div>
+              <input type="tel" id="phone" formControlName="phone" placeholder="1234567890" />
+              @if (checkoutForm.get('phone')?.touched && checkoutForm.get('phone')?.invalid) {
+                <div class="error">Valid 10-digit phone number is required.</div>
+              }
             </div>
           </div>
 
           <div class="form-group">
             <label for="address">Address</label>
-            <textarea id="address" formControlName="address" placeholder="Street Address, Apartment, etc."></textarea>
-            <div *ngIf="checkoutForm.get('address')?.touched && checkoutForm.get('address')?.invalid" class="error">
-              Address is required.
-            </div>
+            <textarea
+              id="address"
+              formControlName="address"
+              placeholder="Street Address, Apartment, etc."
+            ></textarea>
+            @if (checkoutForm.get('address')?.touched && checkoutForm.get('address')?.invalid) {
+              <div class="error">Address is required.</div>
+            }
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label for="city">City</label>
-              <input type="text" id="city" formControlName="city" placeholder="New York">
-              <div *ngIf="checkoutForm.get('city')?.touched && checkoutForm.get('city')?.invalid" class="error">
-                City is required.
-              </div>
+              <input type="text" id="city" formControlName="city" placeholder="New York" />
+              @if (checkoutForm.get('city')?.touched && checkoutForm.get('city')?.invalid) {
+                <div class="error">City is required.</div>
+              }
             </div>
             <div class="form-group">
               <label for="zipCode">ZIP Code</label>
-              <input type="text" id="zipCode" formControlName="zipCode" placeholder="10001">
-              <div *ngIf="checkoutForm.get('zipCode')?.touched && checkoutForm.get('zipCode')?.invalid" class="error">
-                Valid ZIP code is required.
-              </div>
+              <input type="text" id="zipCode" formControlName="zipCode" placeholder="10001" />
+              @if (checkoutForm.get('zipCode')?.touched && checkoutForm.get('zipCode')?.invalid) {
+                <div class="error">Valid ZIP code is required.</div>
+              }
             </div>
           </div>
         </div>
@@ -60,21 +69,21 @@
           <h2>Payment Method</h2>
           <div class="payment-options">
             <label class="payment-option">
-              <input type="radio" formControlName="paymentMethod" value="Credit Card">
+              <input type="radio" formControlName="paymentMethod" value="Credit Card" />
               <div class="option-content">
                 <i class="ri-visa-line"></i>
                 <span>Credit Card</span>
               </div>
             </label>
             <label class="payment-option">
-              <input type="radio" formControlName="paymentMethod" value="UPI">
+              <input type="radio" formControlName="paymentMethod" value="UPI" />
               <div class="option-content">
                 <i class="ri-qr-code-line"></i>
                 <span>UPI</span>
               </div>
             </label>
             <label class="payment-option">
-              <input type="radio" formControlName="paymentMethod" value="Cash on Delivery">
+              <input type="radio" formControlName="paymentMethod" value="Cash on Delivery" />
               <div class="option-content">
                 <i class="ri-truck-line"></i>
                 <span>Cash on Delivery</span>
@@ -84,7 +93,7 @@
         </div>
 
         <button type="submit" class="place-order-btn" [disabled]="checkoutForm.invalid">
-          Place Order (${{ totalPrice() | number:'1.2-2' }})
+          Place Order (${{ totalPrice() | number: '1.2-2' }})
         </button>
       </form>
     </div>
@@ -93,19 +102,21 @@
       <div class="summary-card">
         <h2>Order Summary</h2>
         <div class="item-list">
-          <div *ngFor="let item of cartItems()" class="summary-item">
-            <img [src]="item.product.image" [alt]="item.product.title">
-            <div class="item-details">
-              <span class="title">{{ item.product.title }}</span>
-              <span class="qty">Qty: {{ item.quantity }}</span>
+          @for (item of cartItems(); track item) {
+            <div class="summary-item">
+              <img [src]="item.product.image" [alt]="item.product.title" />
+              <div class="item-details">
+                <span class="title">{{ item.product.title }}</span>
+                <span class="qty">Qty: {{ item.quantity }}</span>
+              </div>
+              <span class="price">${{ item.product.price * item.quantity | number: '1.2-2' }}</span>
             </div>
-            <span class="price">${{ (item.product.price * item.quantity) | number:'1.2-2' }}</span>
-          </div>
+          }
         </div>
         <div class="totals">
           <div class="total-row">
             <span>Subtotal</span>
-            <span>${{ totalPrice() | number:'1.2-2' }}</span>
+            <span>${{ totalPrice() | number: '1.2-2' }}</span>
           </div>
           <div class="total-row">
             <span>Shipping</span>
@@ -113,7 +124,7 @@
           </div>
           <div class="total-row grand-total">
             <span>Total</span>
-            <span>${{ totalPrice() | number:'1.2-2' }}</span>
+            <span>${{ totalPrice() | number: '1.2-2' }}</span>
           </div>
         </div>
       </div>
