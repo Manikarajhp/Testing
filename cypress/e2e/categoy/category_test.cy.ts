@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 describe('Categories Page Testing', () => {
 
   beforeEach(() => {
@@ -127,7 +129,7 @@ describe('Categories Page Testing', () => {
   it('should display matching products while searching', () => {
 
     cy.get('#search-input')
-      .type('phone');
+      .type('jewelery');
 
     cy.get('[data-cy="product-card"]')
       .should('exist');
@@ -150,7 +152,7 @@ describe('Categories Page Testing', () => {
   it('should open product detail page', () => {
 
     cy.get('#search-input')
-      .type('phone');
+      .type('jewelery');
 
     cy.get('[data-cy="product-card"]')
       .first()
@@ -164,7 +166,7 @@ describe('Categories Page Testing', () => {
   it('should open product detail page using view details button', () => {
 
     cy.get('#search-input')
-      .type('phone');
+      .type('jewelery');
 
     cy.get('#view-details')
       .first()

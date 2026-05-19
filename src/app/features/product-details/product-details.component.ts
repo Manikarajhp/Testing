@@ -8,8 +8,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ProductService, Review } from '../../core/services/product.service';
 import { CartService } from '../../core/services/cart.service';
 import { Product } from '../../core/models/product.model';
-import { switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { of } from 'rxjs/internal/observable/of';
 
 @Component({
   selector: 'app-product-details',
@@ -34,21 +35,37 @@ export class ProductDetailsComponent {
   reviews = signal<Review[]>([]);
   quantity = signal(1);
 
-  product = toSignal(
-    this.route.paramMap.pipe(
-      switchMap(params => {
-        const id = params.get('id');
-        window.scrollTo(0, 0);
-        if (!id) return [undefined];
-        return this.productService.getProductById(id);
-      }),
-      tap(product => {
-        if (product) {
-          this.loadReviews(product.id);
-        }
-      })
-    )
-  );
+ product = toSignal(
+  this.route.paramMap.pipe(
+
+    map(params => params.get('id')),
+
+    switchMap(id => {
+
+      window.scrollTo(0, 0);
+
+      if (!id) {
+        return of(undefined);
+      }
+
+      return this.productService.getProductById(id);
+
+    }),
+
+    tap(product => {
+
+      if (product) {
+
+        product.stock = 10;
+
+        this.loadReviews(String(product.id));
+
+      }
+
+    })
+
+  )
+);
 
   loadReviews(productId: string) {
     this.productService.getProductReviews(productId).subscribe(reviews => {
@@ -57,8 +74,18 @@ export class ProductDetailsComponent {
   }
 
   incrementQuantity() {
+
+  const currentProduct = this.product();
+
+  if (!currentProduct) return;
+
+  const stock = currentProduct.stock || 10;
+
+  if (this.quantity() < stock) {
     this.quantity.update(q => q + 1);
   }
+
+}
 
   decrementQuantity() {
     this.quantity.update(q => q > 1 ? q - 1 : q);

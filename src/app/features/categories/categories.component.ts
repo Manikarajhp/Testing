@@ -53,7 +53,8 @@ export class CategoriesComponent implements OnInit {
     });
 
     this.productService.getProducts().subscribe(products => {
-      this.allProducts.set(products);
+      const updatedProducts = products.map(product => ({ ...product, stock: 10 }));
+      this.allProducts.set(updatedProducts);
       this.applyFiltersAndSort();
     });
   }

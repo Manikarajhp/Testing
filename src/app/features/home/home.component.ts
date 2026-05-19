@@ -15,6 +15,7 @@ import { FooterComponent } from '../../shared/components/footer/footer.component
 import { debounceTime, distinctUntilChanged, switchMap, startWith, map } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { combineLatest } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -39,6 +40,7 @@ export class HomeComponent {
   private readonly cartService = inject(CartService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly route = inject(ActivatedRoute);
+  private http = inject(HttpClient);
   
   searchControl = new FormControl('');
 

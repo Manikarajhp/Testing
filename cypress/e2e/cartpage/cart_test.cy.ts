@@ -1,3 +1,5 @@
+/// <reference types="cypress" />
+
 describe('Cart Page Test Suite', () => {
 
   beforeEach(() => {

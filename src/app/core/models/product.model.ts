@@ -4,8 +4,12 @@ export interface Product {
   description: string;
   category: string;
   price: number;
-  rating: number;
-  stock: number;
+  rating: Rating;
   image: string;
-  createdAt: Date;
+  stock: number;
+}
+
+export interface Rating {
+  rate: number;
+  count: number;
 }
