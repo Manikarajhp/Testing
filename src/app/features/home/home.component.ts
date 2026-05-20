@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, effect, inject, linkedSignal, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';
@@ -36,6 +36,28 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
+
+  cartPrice=signal(1000);
+  tax=computed(()=>this.cartPrice()*0.10);
+  total=computed(()=>this.cartPrice()+this.tax());
+  paymentMethod=linkedSignal(()=>{
+    return this.cartPrice()>5000 ? "online":"offline"
+  })
+
+  increase(){
+    this.cartPrice.set(this.cartPrice()+100);
+  }
+
+  constructor(){
+    effect(()=>{
+      console.log(this.cartPrice());
+    })
+
+    
+  }
+  
+
+
   private readonly productService = inject(ProductService);
   private readonly cartService = inject(CartService);
   private readonly snackBar = inject(MatSnackBar);

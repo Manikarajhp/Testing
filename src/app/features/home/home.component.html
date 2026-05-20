@@ -1,4 +1,10 @@
 
+<h2>cart price : {{ cartPrice() }}</h2>
+<h2>tax : {{ tax() }}</h2>
+<h2>total : {{ total() }}</h2>
+<h2>payment method : {{paymentMethod() }}</h2>
+<button mat-flat-button color="primary"  (click)="increase()">increase_price</button>
+
 <main class="min-h-screen bg-gray-50">
   <!-- Hero Section -->
   <section class="relative bg-indigo-900 h-[500px] flex items-center overflow-hidden">
