@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { Order } from '../models/order.model';
 import { CartService } from './cart.service';
 
@@ -6,11 +6,11 @@ import { CartService } from './cart.service';
   providedIn: 'root'
 })
 export class OrderService {
-  private ordersSignal = signal<Order[]>(this.loadOrders());
+  private readonly ordersSignal = signal<Order[]>(this.loadOrders());
 
   public orders = this.ordersSignal.asReadonly();
 
-  constructor(private cartService: CartService) {}
+  constructor(private readonly cartService: CartService) {}
 
   private loadOrders(): Order[] {
     const savedOrders = localStorage.getItem('orders');

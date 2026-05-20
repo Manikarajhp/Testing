@@ -1,15 +1,15 @@
-import { Component, inject, signal } from '@angular/core';
-
+import { afterRenderEffect, Component, computed, effect, ElementRef, inject, linkedSignal, Renderer2, signal, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { CustomValidators } from '../../shared/validators/custom-validators';
 import { animate, style, transition, trigger } from '@angular/animations';
+import { MatAnchor } from "@angular/material/button";
 
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatAnchor],
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
   animations: [
@@ -28,12 +28,52 @@ export class AuthComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private renderer = inject(Renderer2);
+  private elementRef = inject(ElementRef);
 
   isSignIn = signal(true);
   isLoading = signal(false);
   showPassword = signal(false);
   errorMessage = signal('');
   successMessage = signal('');
+
+  // Theme implementation with localStorage persistence
+  private readonly THEME_STORAGE_KEY = 'authComponentTheme';
+  theme = signal<'light' | 'dark'>(localStorage.getItem(this.THEME_STORAGE_KEY) as 'light' | 'dark' || 'light');
+
+  // Effect to apply theme classes to host and persist to localStorage
+  private themeEffect = effect(() => {
+    const currentTheme = this.theme();
+    
+    // Persist to localStorage
+    localStorage.setItem(this.THEME_STORAGE_KEY, currentTheme);
+    
+    // Apply/remove theme classes on host element
+    if (currentTheme === 'dark') {
+      this.renderer.addClass(this.elementRef.nativeElement, 'dark-host');
+      this.renderer.removeClass(this.elementRef.nativeElement, 'light-host');
+    } else {
+      this.renderer.addClass(this.elementRef.nativeElement, 'light-host');
+      this.renderer.removeClass(this.elementRef.nativeElement, 'dark-host');
+    }
+  });
+
+  @ViewChild('themeBtn') themeButton!: ElementRef;
+  @ViewChild('emailInput') emailInput! : ElementRef;
+
+  constructor() {
+    afterRenderEffect(() => {
+      if (this.themeButton?.nativeElement) {
+        console.log('Theme button text:', this.themeButton.nativeElement.innerText);
+      }
+    this.emailInput.nativeElement.focus();
+    });
+  }
+
+  // Toggle between light and dark themes
+  toggleTheme(): void {
+    this.theme.update(current => current === 'light' ? 'dark' : 'light');
+  }
 
   signInForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email, CustomValidators.eMailCom()]],
@@ -42,7 +82,7 @@ export class AuthComponent {
 
   signUpForm: FormGroup = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(15)]],
-    email: ['', [Validators.required, Validators.email, , CustomValidators.eMailCom()]],
+    email: ['', [Validators.required, Validators.email, CustomValidators.eMailCom()]],
     password: ['', [Validators.required, CustomValidators.passwordStrength()]],
     confirmPassword: ['', [Validators.required]]
   }, {

@@ -1,4 +1,4 @@
-import { Component, inject, signal, effect, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, signal, effect, linkedSignal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -18,11 +18,11 @@ import { take } from 'rxjs/operators';
   selector: 'app-profile',
   standalone: true,
   imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
-    MatIconModule, 
-    MatButtonModule, 
-    MatCardModule, 
+    CommonModule,
+    ReactiveFormsModule,
+    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
     MatDividerModule,
     MatSnackBarModule,
     MatRadioModule,
@@ -37,7 +37,6 @@ export class ProfileComponent {
   private readonly fb = inject(FormBuilder);
   public authService = inject(AuthService);
   private readonly snackBar = inject(MatSnackBar);
-  private readonly cdr = inject(ChangeDetectorRef);
   private readonly router = inject(Router);
 
   profileForm!: FormGroup;
@@ -46,14 +45,28 @@ export class ProfileComponent {
   countries = ['India', 'USA', 'UK', 'Australia', 'Canada', 'Singapore'];
   genders = ['male', 'female', 'other'];
 
+  // Source signal: the current user's country from the auth service
+  userCountrySource = computed(() => this.authService.currentUser()?.country || 'India');
+
+  // linkedSignal: writable signal that is linked to the source signal.
+  // It starts as the source value, can be changed manually, but will reset
+  // to the source value whenever the source changes.
+  newsletterCountry = linkedSignal(() => this.userCountrySource());
+
   constructor() {
+    // Effect to redirect if no user
     effect(() => {
       const user = this.authService.currentUser();
       if (!user) {
-        this.router.navigate(['/auth']);
+        this.router.navigate(['/login']);
       } else if (!this.profileForm) {
         this.initForm(user);
       }
+    });
+
+    // Optional: effect to log changes to the linked signal (demonstration)
+    effect(() => {
+      console.log(`Newsletter country preference changed to: ${this.newsletterCountry()}`);
     });
   }
 
@@ -70,7 +83,7 @@ export class ProfileComponent {
       gender: [user.gender || ''],
       pincode: [user.pincode || '', [Validators.pattern('^[0-9]{6}$')]]
     });
-    
+
     // Set initial disabled state based on isEditMode
     if (this.isEditMode()) {
       this.profileForm.enable();
@@ -101,7 +114,7 @@ export class ProfileComponent {
       next: () => {
         this.isLoading.set(false);
         this.isEditMode.set(false);
-        this.cdr.detectChanges();
+        // No need to manually reset newsletterCountry – linkedSignal will react to the source change automatically
         this.snackBar.open('Profile updated successfully! ✨', 'Close', {
           duration: 3000,
           panelClass: ['bg-green-600', 'text-white']
@@ -114,5 +127,11 @@ export class ProfileComponent {
         });
       }
     });
+  }
+
+  // Called when the user changes the newsletter country dropdown
+  updateNewsletterCountry(event: Event): void {
+    const select = event.target as HTMLSelectElement;
+    this.newsletterCountry.set(select.value);
   }
 }

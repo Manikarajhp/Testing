@@ -1,4 +1,4 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { effect, Injectable, signal } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, tap } from 'rxjs/operators';
 import { User } from '../models/user.model';
@@ -30,18 +30,11 @@ export class AuthService {
     }
   ];
 
-  private currentUserSignal = signal<User | null>(null);
-  public currentUser = this.currentUserSignal.asReadonly();
-  public isLoggedIn = computed(() => !!this.currentUserSignal());
+  private readonly currentUserSignal = signal<User | null>(null); // initialize the current user value to null
+  public currentUser = this.currentUserSignal.asReadonly(); // this currentUser used only in this file
 
-
-  constructor() {
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-      this.currentUserSignal.set(JSON.parse(savedUser));
-    }
-  }
-
+  
+  
   register(userData: Partial<User>): Observable<User> {
     const existingUser = this.users.find(u => u.email === userData.email);
     if (existingUser) {
@@ -80,7 +73,7 @@ export class AuthService {
     return of(user).pipe(
       delay(1000),
       tap(u => {
-        this.currentUserSignal.set(u);
+        this.currentUserSignal.set(u);// store the current user in the signal
         localStorage.setItem('currentUser', JSON.stringify(u));
       })
     );

@@ -8,13 +8,13 @@
       <div class="absolute inset-0 bg-gradient-to-r from-indigo-900 to-transparent"></div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full" >
       <div class="max-w-2xl">
         <h1 class="text-5xl md:text-6xl font-black text-white leading-tight mb-6">
           @if (currentCategory()) {
             Explore our <span class="text-indigo-400">{{ currentCategory() | titlecase }}</span> Collection.
           } @else {
-            Upgrade Your <span class="text-indigo-400">Lifestyle</span> with SHOP.
+            Upgrade Your <span [class.text-yellow-500]="theme() === 'dark'" [class.text-blue-500]="theme() === 'light'" >Lifestyle</span> with SHOP.
           }
         </h1>
         <p class="text-xl text-indigo-100 mb-8 max-w-lg">

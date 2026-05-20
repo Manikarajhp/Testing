@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';
@@ -43,6 +43,7 @@ export class HomeComponent {
   private http = inject(HttpClient);
   
   searchControl = new FormControl('');
+  theme = signal<'light' | 'dark'>(localStorage.getItem('authComponentTheme') as 'light' | 'dark' || 'light');
 
   private readonly routeParams$ = this.route.paramMap.pipe(
     map(params => params.get('type'))

@@ -11,7 +11,7 @@ import { filter } from 'rxjs';
 })
 export class App {
   protected readonly title = signal('shop');
-  private router = inject(Router);
+  private readonly router = inject(Router);
   showNavbar = signal(false);
 
   constructor() {
