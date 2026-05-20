@@ -45,14 +45,7 @@ describe('Profile Tests', () => {
 
     cy.visit('http://localhost:4200/login')
 
-    cy.get('#signin-email')
-      .type('john@example.com')
-
-    cy.get('#signin-password')
-      .type('Password123!')
-
-    cy.get('#signin-submit')
-      .click()
+    cy.login();
 
   }
 

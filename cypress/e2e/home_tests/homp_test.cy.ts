@@ -4,15 +4,9 @@ describe('Home Page Complete Test Suite', () => {
 
   beforeEach(() => {
     // Login before every test
-    cy.visit('http://localhost:4200/login');
-
-    cy.get('#signin-email').type('john@example.com');
-    cy.get('#signin-password').type('Password123!');
-    cy.get('#signin-submit').click();
-
+    cy.login();
     cy.url().should('include', '/home');
   });
-
 
   //Navbar
 
@@ -79,7 +73,7 @@ it('Logout check', () => {
     const search = "keyboard"
     cy.get('#product-search-input').type(search);
     
-    cy.wait(2000);
+    cy.wait(2000); //fix
     
     cy.get('.product-card:visible').each(($card) => {
       cy.wrap($card)

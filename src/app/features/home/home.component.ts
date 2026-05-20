@@ -65,6 +65,7 @@ export class HomeComponent {
   private http = inject(HttpClient);
   
   searchControl = new FormControl('');
+  theme = signal<'light' | 'dark'>(localStorage.getItem('authComponentTheme') as 'light' | 'dark' || 'light');
 
   private readonly routeParams$ = this.route.paramMap.pipe(
     map(params => params.get('type'))
