@@ -4,78 +4,425 @@
   display: block;
 }
 
+// ============================================
+// LIGHT THEME (default)
+// ============================================
+:host(.light-host) {
+  --bg-page: #f9fafb;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f9fafb;
+  --bg-input: #ffffff;
+  --bg-input-readonly: #f3f4f6;
+  --bg-stat: #f9fafb;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --border-color: #f3f4f6;
+  --border-card: #e5e7eb;
+  --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01);
+  --gradient-start: #4f46e5;
+  --gradient-end: #9333ea;
+  --brand-primary: #4f46e5;
+  --brand-primary-hover: #4338ca;
+  --brand-light: #eef2ff;
+  --success: #10b981;
+  --error: #ef4444;
+  --warning: #f59e0b;
+}
+
+// ============================================
+// DARK THEME
+// ============================================
+:host(.dark-host) {
+  --bg-page: #0f172a;
+  --bg-card: #1e293b;
+  --bg-card-hover: #334155;
+  --bg-input: #334155;
+  --bg-input-readonly: #1e293b;
+  --bg-stat: #334155;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border-color: #334155;
+  --border-card: #334155;
+  --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.15);
+  --gradient-start: #6366f1;
+  --gradient-end: #a855f7;
+  --brand-primary: #6366f1;
+  --brand-primary-hover: #818cf8;
+  --brand-light: #312e81;
+  --success: #10b981;
+  --error: #f87171;
+  --warning: #fbbf24;
+}
+
+// ============================================
+// Global Page Background
+// ============================================
+:host(.light-host) main,
+:host(.dark-host) main {
+  background-color: var(--bg-page);
+  transition: background-color 0.3s ease;
+}
+
+// ============================================
+// Profile Header Card
+// ============================================
 .profile-header-card {
-  @apply bg-white rounded-[2.5rem] shadow-xl overflow-hidden mb-8 border border-gray-100;
+  background-color: var(--bg-card);
+  border-radius: 2.5rem;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  border: 1px solid var(--border-card);
+  box-shadow: var(--shadow-card);
+  transition: all 0.3s ease;
 }
 
 .header-gradient {
-  @apply h-32 bg-gradient-to-r from-indigo-600 to-purple-600;
+  height: 8rem;
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  transition: background 0.3s ease;
 }
 
 .avatar-image {
-  @apply w-32 h-32 rounded-3xl border-4 border-white shadow-lg bg-white object-cover;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 1.5rem;
+  border: 4px solid var(--bg-card);
+  box-shadow: var(--shadow-lg);
+  background-color: var(--bg-card);
+  object-fit: cover;
+  transition: all 0.3s ease;
 }
 
 .status-indicator {
-  @apply absolute -bottom-2 -right-2 bg-green-500 w-6 h-6 rounded-full border-4 border-white;
+  position: absolute;
+  bottom: -0.5rem;
+  right: -0.5rem;
+  background-color: var(--success);
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 9999px;
+  border: 4px solid var(--bg-card);
+  transition: all 0.3s ease;
 }
 
-.edit-btn {
-  @apply px-6 py-2 rounded-xl font-bold bg-indigo-600 text-white hover:bg-indigo-700 transition-all transform active:scale-95 flex items-center gap-2;
-}
-
-.cancel-btn {
-  @apply px-6 py-2 rounded-xl font-bold bg-red-50 text-red-600 hover:bg-red-100 transition-all transform active:scale-95 flex items-center gap-2;
-}
-
-.side-card {
-  @apply bg-white rounded-3xl p-6 shadow-lg border border-gray-100;
-}
-
-.side-card-title {
-  @apply text-lg font-bold text-gray-900 mb-6 flex items-center gap-2;
-}
-
-.stat-row {
-  @apply flex justify-between items-center p-4 bg-gray-50 rounded-2xl;
-}
-
-.stat-value {
-  @apply text-xl font-black text-indigo-600;
-}
-
-.role-badge {
-  @apply px-3 py-1 bg-purple-100 text-purple-600 text-xs font-black rounded-full uppercase;
-}
-
-.form-section {
-  @apply bg-white rounded-3xl p-8 shadow-lg border border-gray-100;
-}
-
-.form-section-title {
-  @apply text-xl font-bold text-gray-900 mb-8 flex items-center gap-2;
-}
-
-.input-group {
-  @apply space-y-2;
-}
-
-.input-label {
-  @apply text-sm font-bold text-gray-500 ml-1;
-}
-
-.form-input {
-  @apply w-full px-4 py-3 rounded-xl border border-gray-100 focus:ring-2 focus:ring-indigo-500 outline-none transition-all;
+// ============================================
+// Theme Toggle Button
+// ============================================
+.btn-light {
+  background-color: #f3f4f6;
+  color: #1f2937;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   
-  &.readonly {
-    @apply bg-gray-50;
+  &:hover {
+    background-color: #e5e7eb;
+    transform: scale(1.1);
   }
 }
 
+.btn-dark {
+  background-color: #1e293b;
+  color: #fbbf24;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  
+  &:hover {
+    background-color: #334155;
+    transform: scale(1.1);
+  }
+}
+
+// ============================================
+// Action Buttons (Edit/Cancel)
+// ============================================
+.edit-btn {
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  background-color: var(--brand-primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: var(--brand-primary-hover);
+    transform: scale(0.98);
+  }
+}
+
+.cancel-btn {
+  padding: 0.5rem 1.5rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: rgba(239, 68, 68, 0.2);
+    transform: scale(0.98);
+  }
+}
+
+// ============================================
+// Side Cards & Stats
+// ============================================
+.side-card {
+  background-color: var(--bg-card);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-card);
+  transition: all 0.3s ease;
+}
+
+.side-card-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  mat-icon {
+    color: var(--brand-primary);
+  }
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: var(--bg-stat);
+  border-radius: 1rem;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  
+  span:first-child {
+    color: var(--text-secondary);
+  }
+}
+
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--brand-primary);
+}
+
+.role-badge {
+  padding: 0.25rem 0.75rem;
+  background-color: var(--brand-light);
+  color: var(--brand-primary);
+  font-size: 0.75rem;
+  font-weight: 900;
+  border-radius: 9999px;
+  text-transform: uppercase;
+}
+
+// ============================================
+// Form Sections
+// ============================================
+.form-section {
+  background-color: var(--bg-card);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border-card);
+  transition: all 0.3s ease;
+}
+
+.form-section-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  
+  mat-icon {
+    color: var(--brand-primary);
+  }
+}
+
+// ============================================
+// Form Inputs
+// ============================================
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-label {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-left: 0.25rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.2s ease;
+  
+  &:focus {
+    ring: 2px solid var(--brand-primary);
+    border-color: var(--brand-primary);
+  }
+  
+  &.readonly,
+  &:read-only {
+    background-color: var(--bg-input-readonly);
+    cursor: default;
+  }
+  
+  // Select dropdown arrow color for dark mode
+  option {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+  }
+}
+
+textarea.form-input {
+  resize: vertical;
+}
+
+// ============================================
+// Material Radio Group Overrides
+// ============================================
+::ng-deep .mat-mdc-radio-button {
+  .mdc-radio__outer-circle {
+    border-color: var(--text-secondary) !important;
+  }
+  
+  .mdc-radio__inner-circle {
+    background-color: var(--brand-primary) !important;
+  }
+  
+  &.mat-mdc-radio-checked .mdc-radio__outer-circle {
+    border-color: var(--brand-primary) !important;
+  }
+  
+  .mdc-label {
+    color: var(--text-primary) !important;
+  }
+}
+
+// ============================================
+// Material Icon Overrides
+// ============================================
+::ng-deep mat-icon {
+  color: var(--text-secondary);
+}
+
+// ============================================
+// Buttons (Discard/Save)
+// ============================================
 .discard-btn {
-  @apply px-8 py-3 rounded-2xl font-bold text-gray-500 hover:bg-gray-100 transition-all;
+  padding: 0.75rem 2rem;
+  border-radius: 1rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  background-color: transparent;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: var(--bg-card-hover);
+  }
 }
 
 .save-btn {
-  @apply px-10 py-3 rounded-2xl font-bold bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50 transition-all shadow-lg shadow-indigo-200;
+  padding: 0.75rem 2.5rem;
+  border-radius: 1rem;
+  font-weight: 700;
+  background-color: var(--brand-primary);
+  color: white;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+  
+  &:hover {
+    background-color: var(--brand-primary-hover);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// ============================================
+// Loading State
+// ============================================
+#profile-loading-container {
+  .animate-spin {
+    border-color: var(--brand-primary);
+    border-top-color: transparent;
+  }
+  
+  p {
+    color: var(--text-secondary);
+  }
+}
+
+// ============================================
+// Newsletter Section
+// ============================================
+.text-indigo-600 {
+  color: var(--brand-primary) !important;
+}
+
+.text-gray-500 {
+  color: var(--text-secondary) !important;
+}
+
+.text-gray-400 {
+  color: var(--text-muted) !important;
+}
+
+.text-gray-700 {
+  color: var(--text-primary) !important;
+}
+
+.text-gray-900 {
+  color: var(--text-primary) !important;
+}
+
+.bg-gray-50 {
+  background-color: transparent !important;
+}
+
+.bg-white {
+  background-color: var(--bg-card) !important;
+}
+
+.border-gray-100 {
+  border-color: var(--border-color) !important;
+}
+
+.shadow-lg {
+  box-shadow: var(--shadow-card) !important;
+}
+
+// ============================================
+// Smooth Transitions
+// ============================================
+* {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
 }

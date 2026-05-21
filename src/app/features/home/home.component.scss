@@ -4,82 +4,442 @@
   display: block;
 }
 
-.hero-cta {
-  @apply px-8 py-6 text-lg rounded-xl bg-indigo-500 hover:bg-indigo-600 transition-all transform hover:scale-105;
+// ============================================
+// LIGHT THEME (default)
+// ============================================
+:host(.light-host) {
+  --bg-page: #f9fafb;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f9fafb;
+  --bg-input: #f9fafb;
+  --bg-input-focus: #ffffff;
+  --bg-hero-overlay: linear-gradient(90deg, rgba(49, 46, 129, 0.95) 0%, rgba(49, 46, 129, 0.7) 100%);
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --text-muted: #9ca3af;
+  --text-hero: #ffffff;
+  --text-hero-accent: #818cf8;
+  --border-color: #f3f4f6;
+  --border-card: #e5e7eb;
+  --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01);
+  --brand-primary: #4f46e5;
+  --brand-primary-hover: #4338ca;
+  --brand-light: #eef2ff;
+  --brand-dark: #312e81;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --rating-star: #fbbf24;
+}
+
+// ============================================
+// DARK THEME
+// ============================================
+:host(.dark-host) {
+  --bg-page: #0f172a;
+  --bg-card: #1e293b;
+  --bg-card-hover: #334155;
+  --bg-input: #334155;
+  --bg-input-focus: #1e293b;
+  --bg-hero-overlay: linear-gradient(90deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.8) 100%);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-hero: #f8fafc;
+  --text-hero-accent: #a5b4fc;
+  --border-color: #334155;
+  --border-card: #334155;
+  --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.15);
+  --brand-primary: #6366f1;
+  --brand-primary-hover: #818cf8;
+  --brand-light: #312e81;
+  --brand-dark: #1e1b4b;
+  --success: #10b981;
+  --warning: #fbbf24;
+  --rating-star: #fbbf24;
+}
+
+// ============================================
+// Global Page Background
+// ============================================
+:host(.light-host) main,
+:host(.dark-host) main {
+  background-color: var(--bg-page);
+  transition: background-color 0.3s ease;
+}
+
+// ============================================
+// Hero Section
+// ============================================
+.hero-section {
+  position: relative;
+  height: 500px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero-bg-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-hero-overlay);
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--text-hero);
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  
+  @media (min-width: 768px) {
+    font-size: 3.75rem;
+  }
+}
+
+.hero-accent {
+  color: var(--text-hero-accent);
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 2rem;
+  max-width: 32rem;
+}
+
+// ============================================
+// Search Card
+// ============================================
+.search-card {
+  background-color: var(--bg-card);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-lg);
+  padding: 1.5rem;
+  border: 1px solid var(--border-card);
+  transition: all 0.3s ease;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  z-index: 10;
 }
 
 .search-input {
-  @apply w-full pl-12 pr-4 py-4 rounded-xl bg-gray-50 border-none focus:ring-2 focus:ring-indigo-500 transition-all outline-none text-gray-700;
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border-radius: 0.75rem;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  outline: none;
+  transition: all 0.2s ease;
+  
+  &:focus {
+    ring: 2px solid var(--brand-primary);
+    border-color: var(--brand-primary);
+    background-color: var(--bg-input-focus);
+  }
+  
+  &::placeholder {
+    color: var(--text-muted);
+  }
 }
 
-.filter-btn {
-  @apply rounded-xl py-6 w-full md:w-auto;
+// ============================================
+// Section Headers
+// ============================================
+.section-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
+.section-subtitle {
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+
+.view-all-btn {
+  font-weight: 700;
+  color: var(--brand-primary);
+  
+  &:hover {
+    background-color: var(--brand-light);
+  }
+}
+
+// ============================================
+// Product Cards
+// ============================================
 .product-card {
-  @apply bg-white rounded-3xl border border-gray-100 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden flex flex-col h-full;
+  background-color: var(--bg-card);
+  border-radius: 1.5rem;
+  border: 1px solid var(--border-card);
+  box-shadow: var(--shadow-card);
+  transition: all 0.5s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  
+  &:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+  }
+}
+
+.product-image-container {
+  position: relative;
+  height: 16rem;
+  overflow: hidden;
+  background-color: var(--bg-card-hover);
 }
 
 .product-image {
-  @apply w-full h-full object-cover transition-transform duration-700 group-hover:scale-110;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.7s ease;
+  
+  .product-card:hover & {
+    transform: scale(1.1);
+  }
 }
 
 .wishlist-btn {
-  @apply bg-white/80 backdrop-blur-md text-gray-600 hover:text-red-500 transition-colors;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  color: var(--text-secondary);
+  
+  &:hover {
+    color: #ef4444;
+  }
 }
 
 .category-badge {
-  @apply px-3 py-1 bg-indigo-600 text-white text-xs font-bold rounded-full shadow-lg;
+  padding: 0.25rem 0.75rem;
+  background-color: var(--brand-primary);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .product-title {
-  @apply text-lg font-bold text-gray-900 group-hover:text-indigo-600 transition-colors cursor-pointer line-clamp-1;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: color 0.2s ease;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  
+  .product-card:hover & {
+    color: var(--brand-primary);
+  }
 }
 
 .star-icon {
-  @apply text-yellow-400 text-sm h-auto w-auto;
+  color: var(--rating-star);
+  font-size: 1rem;
+  width: auto;
+  height: auto;
+}
+
+.product-rating {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.product-reviews {
+  font-size: 0.75rem;
+  color: var(--text-muted);
 }
 
 .product-description {
-  @apply text-gray-500 text-sm line-clamp-2 mb-6 flex-grow;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.product-footer-border {
+  border-top: 1px solid var(--border-color);
 }
 
 .product-price {
-  @apply text-2xl font-black text-gray-900;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--text-primary);
 }
 
 .view-btn {
-  @apply bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all;
+  background-color: var(--brand-light);
+  color: var(--brand-primary);
+  border-radius: 0.75rem !important;
+  padding: 0 1rem;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: var(--brand-primary);
+    color: white;
+  }
 }
 
 .add-cart-btn {
-  @apply bg-indigo-600 text-white hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-200;
+  background-color: var(--brand-primary);
+  color: white;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.3);
+  
+  &:hover {
+    background-color: var(--brand-primary-hover);
+    transform: scale(1.05);
+  }
 }
 
+// ============================================
+// Empty State
+// ============================================
+.empty-state {
+  grid-column: 1 / -1;
+  padding: 5rem 0;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 4rem;
+  width: auto;
+  height: auto;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.empty-text {
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+
+// ============================================
+// Newsletter Banner
+// ============================================
 .newsletter-banner {
-  @apply bg-indigo-600 rounded-[3rem] p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between text-center md:text-left;
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-dark));
+  border-radius: 3rem;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  text-align: center;
+  
+  @media (min-width: 768px) {
+    flex-direction: row;
+    text-align: left;
+  }
+}
+
+.newsletter-title {
+  font-size: 2.25rem;
+  font-weight: 900;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.newsletter-text {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
 }
 
 .newsletter-input {
-  @apply px-6 py-4 rounded-2xl w-full focus:ring-4 focus:ring-indigo-300 outline-none;
+  padding: 1rem 1.5rem;
+  border-radius: 1rem;
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: white;
+  color: var(--text-primary);
+  
+  &:focus {
+    ring: 4px solid rgba(255, 255, 255, 0.3);
+  }
+  
+  &::placeholder {
+    color: var(--text-muted);
+  }
 }
 
 .subscribe-btn {
-  @apply bg-white text-indigo-600 font-bold px-8 py-4 rounded-2xl hover:bg-indigo-50 transition-colors whitespace-nowrap;
+  background-color: white;
+  color: var(--brand-primary);
+  font-weight: 700;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    transform: scale(0.98);
+  }
 }
 
 .mail-icon {
-  @apply text-[12rem] h-[12rem] w-[12rem] text-indigo-500/50;
+  font-size: 12rem;
+  width: 12rem;
+  height: 12rem;
+  color: rgba(255, 255, 255, 0.2);
 }
 
 .circle {
-  @apply absolute bg-indigo-500 rounded-full opacity-20;
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
   
   &-top {
-    @apply -top-20 -right-20 w-80 h-80;
+    top: -5rem;
+    right: -5rem;
+    width: 20rem;
+    height: 20rem;
   }
   
   &-bottom {
-    @apply -bottom-20 -left-20 w-60 h-60;
+    bottom: -5rem;
+    left: -5rem;
+    width: 15rem;
+    height: 15rem;
   }
+}
+
+// ============================================
+// Smooth Transitions
+// ============================================
+* {
+  transition-property: background-color, border-color, color, box-shadow, transform;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
 }

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, effect, ElementRef, inject, Renderer2, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';
@@ -42,8 +42,31 @@ export class HomeComponent {
   private readonly route = inject(ActivatedRoute);
   private http = inject(HttpClient);
   
+  private renderer = inject(Renderer2);
+  private elementRef = inject(ElementRef);
+  
   searchControl = new FormControl('');
   theme = signal<'light' | 'dark'>(localStorage.getItem('authComponentTheme') as 'light' | 'dark' || 'light');
+
+  private readonly THEME_STORAGE_KEY = 'authComponentTheme';
+
+  // Effect to apply theme classes
+  private themeEffect = effect(() => {
+    const currentTheme = this.theme();
+    localStorage.setItem(this.THEME_STORAGE_KEY, currentTheme);
+    
+    if (currentTheme === 'dark') {
+      this.renderer.addClass(this.elementRef.nativeElement, 'dark-host');
+      this.renderer.removeClass(this.elementRef.nativeElement, 'light-host');
+    } else {
+      this.renderer.addClass(this.elementRef.nativeElement, 'light-host');
+      this.renderer.removeClass(this.elementRef.nativeElement, 'dark-host');
+    }
+  });
+
+  toggleTheme(): void {
+    this.theme.update(current => current === 'light' ? 'dark' : 'light');
+  }
 
   private readonly routeParams$ = this.route.paramMap.pipe(
     map(params => params.get('type'))

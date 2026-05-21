@@ -1,4 +1,4 @@
-import { Component, inject, signal, effect, linkedSignal, computed } from '@angular/core';
+import { Component, inject, signal, effect, linkedSignal, computed, Renderer2, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -38,12 +38,38 @@ export class ProfileComponent {
   public authService = inject(AuthService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly router = inject(Router);
+  private renderer = inject(Renderer2);
+  private elementRef = inject(ElementRef);
 
   profileForm!: FormGroup;
   isEditMode = signal(false);
   isLoading = signal(false);
   countries = ['India', 'USA', 'UK', 'Australia', 'Canada', 'Singapore'];
   genders = ['male', 'female', 'other'];
+  private readonly THEME_STORAGE_KEY = 'authComponentTheme';
+  theme = signal<'light' | 'dark'>(localStorage.getItem(this.THEME_STORAGE_KEY) as 'light' | 'dark' || 'light');
+
+  // Effect to apply theme classes to host and persist to localStorage
+  private themeEffect = effect(() => {
+    const currentTheme = this.theme();
+    
+    // Persist to localStorage
+    localStorage.setItem(this.THEME_STORAGE_KEY, currentTheme);
+    
+    // Apply/remove theme classes on host element
+    if (currentTheme === 'dark') {
+      this.renderer.addClass(this.elementRef.nativeElement, 'dark-host');
+      this.renderer.removeClass(this.elementRef.nativeElement, 'light-host');
+    } else {
+      this.renderer.addClass(this.elementRef.nativeElement, 'light-host');
+      this.renderer.removeClass(this.elementRef.nativeElement, 'dark-host');
+    }
+  });
+
+  toggleTheme(): void {
+    this.theme.update(current => current === 'light' ? 'dark' : 'light');
+  }
+
 
   // Source signal: the current user's country from the auth service
   userCountrySource = computed(() => this.authService.currentUser()?.country || 'India');
