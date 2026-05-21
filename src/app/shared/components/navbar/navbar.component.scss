@@ -2,6 +2,13 @@
   display: block;
 }
 
+:host(.dark-host){
+  nav{
+    background-color: #334155;
+    border: #334155;
+  }
+}
+
 .mat-mdc-icon-button {
-  --mdc-icon-button-icon-size: 24px;
+  --mdc-icon-button-icon-size: 23px;
 }

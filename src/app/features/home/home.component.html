@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 <h2>cart price : {{ cartPrice() }}</h2>
 <h2>tax : {{ tax() }}</h2>
@@ -6,24 +7,27 @@
 <button mat-flat-button color="primary"  (click)="increase()">increase_price</button>
 
 <main class="min-h-screen bg-gray-50">
+=======
+<main class="min-h-screen">
+>>>>>>> 4e4013d034dd82fd7ae21d231cb018bb66ed2d7e
   <!-- Hero Section -->
-  <section class="relative bg-indigo-900 h-[500px] flex items-center overflow-hidden">
+  <section class="hero-section">
     <div class="absolute inset-0 z-0">
       <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1600&auto=format&fit=crop&q=80" 
-           class="w-full h-full object-cover opacity-40" alt="Hero background">
-      <div class="absolute inset-0 bg-gradient-to-r from-indigo-900 to-transparent"></div>
+           class="hero-bg-img" alt="Hero background">
+      <div class="hero-overlay"></div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full" >
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
       <div class="max-w-2xl">
-        <h1 class="text-5xl md:text-6xl font-black text-white leading-tight mb-6">
+        <h1 class="hero-title">
           @if (currentCategory()) {
-            Explore our <span class="text-indigo-400">{{ currentCategory() | titlecase }}</span> Collection.
+            Explore our <span class="hero-accent">{{ currentCategory() | titlecase }}</span> Collection.
           } @else {
-            Upgrade Your <span [class.text-yellow-500]="theme() === 'dark'" [class.text-blue-500]="theme() === 'light'" >Lifestyle</span> with SHOP.
+            Upgrade Your <span class="hero-accent">Lifestyle</span> with SHOP.
           }
         </h1>
-        <p class="text-xl text-indigo-100 mb-8 max-w-lg">
+        <p class="hero-subtitle">
           @if (currentCategory()) {
             Discover the best {{ currentCategory() }} products handpicked for quality and style.
           } @else {
@@ -36,10 +40,10 @@
 
   <!-- Search & Filters -->
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
-    <div class="bg-white rounded-2xl shadow-xl p-6 border border-gray-100">
+    <div class="search-card">
       <div class="flex flex-col md:flex-row gap-4 items-center">
         <div class="w-full relative">
-          <mat-icon class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 z-10">search</mat-icon>
+          <mat-icon class="search-icon">search</mat-icon>
           <input [formControl]="searchControl" id="product-search-input"
                  type="text" 
                  placeholder="Search for products, categories..." 
@@ -53,24 +57,24 @@
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <div class="flex justify-between items-center mb-10">
       <div>
-        <h2 class="text-3xl font-bold text-gray-900">
+        <h2 class="section-title">
           {{ currentCategory() ? (currentCategory() | titlecase) + ' Products' : 'Featured Products' }}
         </h2>
-        <p class="text-gray-500 mt-1">
+        <p class="section-subtitle">
           {{ currentCategory() ? 'Showing all items in ' + currentCategory() : 'Handpicked quality items just for you' }}
         </p>
       </div>
-      <button mat-button color="primary" class="font-bold" id="view-all-products-btn">View All</button>
+      <button mat-button class="view-all-btn" id="view-all-products-btn">View All</button>
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="product-grid">
       @for (product of products(); track product.id) {
-        <div class="group product-card cursor-pointer"
+        <div class="group product-card"
              [routerLink]="['/products', product.id]"
              [attr.id]="'product-card-' + product.id">
            
           <!-- Image Area -->
-          <div class="relative h-64 overflow-hidden bg-gray-100">
+          <div class="product-image-container">
             <img [src]="product.image" [alt]="product.title" 
                  class="product-image">
             <div class="absolute top-4 right-4">
@@ -95,20 +99,18 @@
             
             <div class="flex items-center space-x-1 mb-3">
               <mat-icon class="star-icon">star</mat-icon>
-              <span class="text-sm font-bold text-gray-700">{{ product.rating.rate }}</span>
-              <span class="text-xs text-gray-400">({{  product.rating.count }} reviews)</span>
+              <span class="product-rating">{{ product.rating.rate }}</span>
+              <span class="product-reviews">({{ product.rating.count }} reviews)</span>
             </div>
 
             <p class="product-description">
               {{ product.description }}
             </p>
 
-            <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-50">
+            <div class="flex items-center justify-between mt-auto pt-4 product-footer-border">
               <span class="product-price">{{ product.price | currency }}</span>
               <div class="flex space-x-2">
-
-                <button mat-button class="view-btn !rounded-xl !px-4"
-                        [routerLink]="['/products', product.id]">
+                <button mat-button class="view-btn">
                   View Details
                 </button>
                 <button mat-icon-button class="add-cart-btn" 
@@ -121,9 +123,9 @@
           </div>
         </div>
       } @empty {
-        <div class="col-span-full py-20 text-center" id="no-products-found">
-          <mat-icon class="text-gray-300 text-6xl mb-4">search_off</mat-icon>
-          <p class="text-gray-500 text-xl font-medium">No products found for your search.</p>
+        <div class="col-span-full empty-state" id="no-products-found">
+          <mat-icon class="empty-icon">search_off</mat-icon>
+          <p class="empty-text">No products found for your search.</p>
         </div>
       }
     </div>
@@ -133,8 +135,8 @@
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
     <div class="newsletter-banner">
       <div class="relative z-10 max-w-xl">
-        <h2 class="text-4xl font-black text-white mb-4">Join our Newsletter</h2>
-        <p class="text-indigo-100 text-lg mb-8">Get the latest updates on new products and upcoming sales directly in your inbox.</p>
+        <h2 class="newsletter-title">Join our Newsletter</h2>
+        <p class="newsletter-text">Get the latest updates on new products and upcoming sales directly in your inbox.</p>
         <div class="flex flex-col sm:flex-row gap-4">
           <input type="email" placeholder="Enter your email" id="newsletter-email-input"
                  class="newsletter-input">
@@ -146,12 +148,10 @@
       <div class="mt-12 md:mt-0 relative z-10 hidden lg:block">
          <mat-icon class="mail-icon">mail</mat-icon>
       </div>
-      <!-- Decorative circles -->
       <div class="circle circle-top"></div>
       <div class="circle circle-bottom"></div>
     </div>
   </section>
 </main>
 
-<!-- Footer ONLY on Home Page -->
 <app-footer></app-footer>
