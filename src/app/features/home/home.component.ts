@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-import { Component, computed, effect, inject, linkedSignal, signal } from '@angular/core';
-=======
-import { Component, effect, ElementRef, inject, Renderer2, signal } from '@angular/core';
->>>>>>> 4e4013d034dd82fd7ae21d231cb018bb66ed2d7e
+
+import { Component, computed, effect, ElementRef, inject, linkedSignal, Renderer2, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';

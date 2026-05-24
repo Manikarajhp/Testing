@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
-
+@plugin "daisyui";
 :root {
   --font-family: 'Outfit', sans-serif;
 }

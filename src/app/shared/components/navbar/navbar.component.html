@@ -10,14 +10,17 @@
 
       <!-- Desktop Navigation -->
       <div class="hidden md:flex space-x-8 items-center" id="desktop-nav">
+        <lucide-angular [img]="homeIcon"></lucide-angular>
         <a routerLink="/home" routerLinkActive="text-indigo-600 border-indigo-600" [routerLinkActiveOptions]="{exact: true}" 
            class="text-gray-600 hover:text-indigo-600 font-medium transition-colors py-2 border-b-2 border-transparent" id="nav-home-link">
           Home
         </a>
+        <lucide-angular [img]="catIcon"></lucide-angular>
         <a routerLink="/category" routerLinkActive="text-indigo-600 border-indigo-600" 
-           class="text-gray-600 hover:text-indigo-600 font-medium transition-colors py-2 border-b-2 border-transparent" id="nav-category-link">
-          Category
-        </a>
+        class="text-gray-600 hover:text-indigo-600 font-medium transition-colors py-2 border-b-2 border-transparent" id="nav-category-link">
+        Category
+      </a>
+        <lucide-angular [img]="orderIcon"></lucide-angular>
         <a routerLink="/orders" routerLinkActive="text-indigo-600 border-indigo-600" 
            class="text-gray-600 hover:text-indigo-600 font-medium transition-colors py-2 border-b-2 border-transparent" id="nav-orders-link">
           My Orders
@@ -27,7 +30,7 @@
       <!-- Icons & Mobile Toggle -->
       <div class="flex items-center space-x-2">
         <button mat-icon-button class="text-gray-600 hover:text-indigo-600 transition-colors relative" routerLink="/cart" id="nav-cart-btn">
-          <mat-icon>shopping_cart</mat-icon>
+          <lucide-angular [img]="cartIcon"></lucide-angular>
           @if (cartService.cartCount() > 0) {
             <span class="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full" id="nav-cart-count">
               {{ cartService.cartCount() }}
@@ -35,9 +38,9 @@
           }
         </button>
         <button mat-icon-button class="text-gray-600 hover:text-indigo-600 transition-colors" routerLink="/profile" id="nav-profile-btn">
-          <mat-icon>person</mat-icon>
+          <lucide-angular [img]="userIcon"></lucide-angular>
         </button>
-
+        
         @if (authService.currentUser()) {
           <button mat-icon-button class="hidden md:flex text-gray-600 hover:text-red-600 transition-colors" (click)="authService.logout()" id="nav-logout-btn">
             <mat-icon>logout</mat-icon>

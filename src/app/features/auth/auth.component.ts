@@ -6,6 +6,7 @@ import { CustomValidators } from '../../shared/validators/custom-validators';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { MatAnchor } from "@angular/material/button";
 
+
 @Component({
   selector: 'app-auth',
   standalone: true,

@@ -6,18 +6,24 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { AuthService } from '../../../core/services/auth.service';
 import { CartService } from '../../../core/services/cart.service';
+import { LucideIconData, Home, LucideAngularModule, LayoutGrid, Package, UserRound, ShoppingCart  } from 'lucide-angular';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, MatIconModule, MatButtonModule, MatToolbarModule],
+  imports: [RouterModule, MatIconModule, MatButtonModule, MatToolbarModule, LucideAngularModule],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent {
   authService = inject(AuthService);
   cartService = inject(CartService);
-  
+  homeIcon = Home;
+  catIcon = LayoutGrid;
+  orderIcon = Package;
+  userIcon = UserRound;
+  cartIcon = ShoppingCart;
+
   private renderer = inject(Renderer2);
   private elementRef = inject(ElementRef);
 
